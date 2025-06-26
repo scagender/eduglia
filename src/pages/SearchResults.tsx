@@ -1,12 +1,13 @@
 
 import { useState } from "react";
-import { MapPin, Users, GraduationCap, ArrowLeft, Filter } from "lucide-react";
+import { MapPin, Users, GraduationCap, ArrowLeft, Filter, Map } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import StarRating from "@/components/StarRating";
 import SearchMap from "@/components/SearchMap";
 import { Link, useSearchParams } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Mock data for demonstration
 const mockSchools = [
@@ -67,6 +68,8 @@ const mockSchools = [
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
   const [sortBy, setSortBy] = useState("relevancia");
+  const [showMap, setShowMap] = useState(false);
+  const isMobile = useIsMobile();
   const address = searchParams.get("direccion") || "";
   const range = searchParams.get("rango") || "10";
 
@@ -101,13 +104,25 @@ const SearchResults = () => {
               <h1 className="text-xl font-semibold">Colegios cerca de "{address}"</h1>
               <p className="text-sm text-gray-600">Radio de búsqueda: {range} km</p>
             </div>
+            {/* Mobile toggle button */}
+            {isMobile && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setShowMap(!showMap)}
+                className="flex items-center gap-2"
+              >
+                <Map className="w-4 h-4" />
+                {showMap ? "Ver colegios" : "Ver mapa"}
+              </Button>
+            )}
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto flex h-[calc(100vh-120px)]">
         {/* Left Panel - Schools List */}
-        <div className="w-1/2 overflow-y-auto bg-white border-r">
+        <div className={`${isMobile ? (showMap ? 'hidden' : 'w-full') : 'w-1/2'} overflow-y-auto bg-white ${!isMobile ? 'border-r' : ''}`}>
           {/* Filter Bar */}
           <div className="sticky top-0 bg-white border-b p-4 z-20">
             <div className="flex items-center gap-3">
@@ -189,7 +204,7 @@ const SearchResults = () => {
         </div>
 
         {/* Right Panel - Map */}
-        <div className="w-1/2 bg-gray-100">
+        <div className={`${isMobile ? (showMap ? 'w-full' : 'hidden') : 'w-1/2'} bg-gray-100`}>
           <SearchMap address={address} schools={mockSchools} />
         </div>
       </div>
