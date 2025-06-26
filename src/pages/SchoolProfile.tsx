@@ -59,56 +59,54 @@ const SchoolProfile = () => {
 
           {/* General Description */}
           <InfoSection title="Descripción General" icon={BookOpen}>
-            <div className="space-y-4">
+            <div className="space-y-7">
               <div>
-                <h3 className="font-bold text-lg mb-2">Misión</h3>
+                <h3 className="font-bold text-lg mb-2"><strong>Misión</strong></h3>
                 <p>Formar mujeres cristianas líderes, capaces de influir positivamente en la sociedad y contribuir a la solución de los desafíos de su tiempo, con respeto a la libertad y llevando el testimonio de Cristo en sus acciones.</p>
               </div>
               <div>
-                <h3 className="font-bold text-lg mb-2">¿Cómo se logra?</h3>
-                <p>Para lograrlo, el colegio ofrece una educación integral que abarca lo académico, lo personal y lo espiritual, inspirada en la visión cristiana de la mujer y con una formación personalizada que se adapta a los ritmos y necesidades de cada alumna, reconociendo siempre a los padres como los primeros educadores.</p>
+                <h3 className="font-bold text-lg mb-2"><strong>¿Cómo se logra?</strong></h3>
+                <p>Se ofrece una educación integral que abarca lo académico, lo personal y lo espiritual, inspirada en la visión cristiana de la mujer y con una formación personalizada que se adapta a los ritmos y necesidades de cada alumna, reconociendo siempre a los padres como los primeros educadores.</p>
               </div>
             </div>
           </InfoSection>
 
           {/* Admission Process */}
           <InfoSection title="Proceso de Admisión" icon={Users}>
-            <div className="space-y-4">
+            <div className="space-y-9">
               <div>
                 <h3 className="font-bold text-lg mb-3">Fechas de postulación</h3>
                 <ul className="space-y-2">
-                  <li><strong>Playgroup a 6to Básico:</strong> Del 1 de abril al 27 de mayo (o hasta agotar vacantes)</li>
-                  <li><strong>Desde 7mo Básico:</strong> Desde Agosto</li>
+                  <li><strong>• Playgroup a 6to Básico:</strong> Del 1 de abril al 27 de mayo (o hasta agotar vacantes)</li>
+                  <li><strong>• Desde 7mo Básico:</strong> Desde Agosto</li>
                 </ul>
               </div>
               
               <div>
                 <h3 className="font-bold text-lg mb-3">Detalles del proceso</h3>
                 <ul className="space-y-3">
-                  <li><strong>Playgroup a 6to Básico:</strong> Evaluación psicopedagógica y entrevista familiar</li>
-                  <li><strong>Desde 7mo Básico:</strong> Prueba de admisión en Lenguaje, Matemáticas e Inglés, más entrevista familiar</li>
-                  <li><strong>Entrevista:</strong> Si la postulante aprueba el examen, se agenda una entrevista con la directora</li>
-                  <li><strong>Padres:</strong> La participación de ambos padres es obligatoria a lo largo del proceso y se espera que estén familiarizados con el proyecto educativo</li>
+                  <li><strong>• Entrevista:</strong> Si la postulante aprueba el examen, se agenda una entrevista con la directora</li>
+                  <li><strong>• Padres:</strong> La participación de ambos padres es obligatoria a lo largo del proceso y se espera que estén familiarizados con el proyecto educativo</li>
                 </ul>
               </div>
 
               <div>
                 <h3 className="font-bold text-lg mb-3">Costo</h3>
                 <ul className="space-y-2">
-                  <li><strong>Tarifa:</strong> <strong>1 UF</strong> por familia, se paga al ser contactados por el colegio</li>
+                  <li>• Tarifa de <strong>1 UF por familia</strong>, se paga al ser contactados por el colegio</li>
                 </ul>
               </div>
 
               <div>
                 <h3 className="font-bold text-lg mb-3">Resultados</h3>
-                <p>Son comunicados por teléfono o correo máximo 3 semanas desde la entrega de la documentación.</p>
+                <p>• Son comunicados por teléfono o correo <strong>máximo 3 semanas</strong> desde la entrega de la documentación.</p>
               </div>
 
               <div>
                 <h3 className="font-bold text-lg mb-3">Links de interés</h3>
                 <ul className="space-y-2">
-                  <li>• Temarios de Exámenes de Admisión</li>
-                  <li>• Fechas y vacantes 2026</li>
+                  <li>• <a href="/temarios-admision" className="text-blue-600 hover:underline">Temarios de Exámenes de Admisión</a></li>
+                  <li>• <a href="/fechasYVacantes" className="text-blue-600 hover:underline">Fechas y vacantes 2026</a></li>
                 </ul>
               </div>
             </div>
@@ -116,7 +114,7 @@ const SchoolProfile = () => {
 
           {/* Cost Information */}
           <InfoSection title="Información de Costos" icon={Award}>
-            <div className="space-y-6">
+            <div className="space-y-9">
               <div>
                 <h3 className="font-bold text-lg mb-3">Matrícula</h3>
                 
@@ -131,7 +129,7 @@ const SchoolProfile = () => {
                   </TableHeader>
                   <TableBody>
                     <TableRow>
-                      <TableCell rowSpan={3} className="font-medium align-top">Matrícula</TableCell>
+                      <TableCell rowSpan={3} className="font-medium align-center">Matrícula</TableCell>
                       <TableCell>Playgroup</TableCell>
                       <TableCell>6,6</TableCell>
                       <TableCell>$256.998</TableCell>
@@ -149,9 +147,9 @@ const SchoolProfile = () => {
                   </TableBody>
                 </Table>
 
-                <ul className="space-y-2">
-                  <li><strong>Tipo de pago:</strong> Anual en marzo</li>
-                  <li><strong>Tope máximo:</strong> <strong>45 UF</strong> (aproximadamente <strong>$1.752.264</strong>)</li>
+                <ul className="space-y-3 mt-3">
+                  <li><strong>• Tipo de pago:</strong> Anual y se hace a principios de año</li>
+                  <li><strong>• Tope máximo:</strong> Por familia son <strong>45 UF</strong> (aproximadamente <strong>$1.752.264</strong>)</li>
                 </ul>
               </div>
             
@@ -169,7 +167,7 @@ const SchoolProfile = () => {
                   </TableHeader>
                   <TableBody>
                     <TableRow>
-                      <TableCell rowSpan={3} className="font-medium align-top">Sin jornada extendida</TableCell>
+                      <TableCell rowSpan={3} className="font-medium align-center">Sin jornada extendida</TableCell>
                       <TableCell>Playgroup</TableCell>
                       <TableCell>6,6</TableCell>
                       <TableCell>$256.998</TableCell>
@@ -203,19 +201,14 @@ const SchoolProfile = () => {
                   </TableBody>
                 </Table>
 
-                <ul className="space-y-2">
-                  <li><strong>Tipo de pago:</strong> 10 cuotas mensuales (marzo a diciembre)</li>
-                  <li><strong>Tope máximo:</strong> <strong>50 UF</strong> mensuales</li>
-                  <li><strong>La colegiatura (ambas) incluye:</strong></li>
+                <ul className="space-y-3 mt-3">
+                  <li>• <strong>Tipo de pago:</strong> 10 cuotas mensuales</li>
+                  <li>• La colegiatura (ambas opciones) <strong>incluye</strong>:</li>
                   <ul className="ml-6 space-y-1">
-                    <li>• Actividades académicas regulares</li>
-                    <li>• Talleres extraprogramáticos</li>
-                    <li>• Uso de instalaciones deportivas y biblioteca</li>
-                    <li>• Materiales básicos de estudio</li>
-                    <li>• Seguros</li>
+                    <li>• <strong>Seguro de accidentes del alumno:</strong> Cobertura de <strong>50 UF</strong> las <strong>24 hrs</strong> del día</li>
+                    <li>• <strong>Seguro de escolaridad:</strong> Cobertura de <strong>120 UF anuales</strong> en caso de fallecimiento o invalidez total del apoderado sostenedor</li>
                   </ul>
-                  <li><strong>Seguro de accidentes del alumno:</strong> Cobertura <strong>24/7</strong></li>
-                  <li><strong>Seguro de escolaridad:</strong> <strong>120 UF anuales</strong> (en caso de fallecimiento o invalidez total de los padres)</li>
+                  
                 </ul>
               </div>
             
@@ -242,21 +235,38 @@ const SchoolProfile = () => {
                 </Table>
 
                 <ul className="space-y-2">
-                  <li><strong>Tipo de pago:</strong> Una sola vez al ingresar al colegio</li>
-                  <li><strong>Tope máximo:</strong> <strong>90 UF</strong> (aproximadamente <strong>$3.504.528</strong>)</li>
+                  <li>• <strong>Tipo de pago:</strong> <strong>Único</strong> y se hace al ingresar al colegio</li>
+                  <li>• <strong>Tope máximo:</strong> <strong>90 UF</strong> (aproximadamente <strong>$3.504.528</strong>)</li>
                 </ul>
               </div>
             </div>
           </InfoSection>
 
           {/* Educational Project */}
+          <InfoSection title="Principios educativos" icon={GraduationCap}>
+            <div className="grid md:grid-cols-2 gap-6">
+              <ul className="space-y-5">
+                <li className="mt-6"><strong>• Desarrollo de la inteligencia:</strong> Enseñar a pensar y aprender</li>
+                <li><strong>• Educación de la voluntad:</strong> Enseñar a buscar la verdad y el bien</li>
+                <li><strong>• Educación espiritual:</strong> Basada en las enseñanzas del Magisterio de la Iglesia Católica</li>
+                <li><strong>• Educación en el amor humano:</strong> Promover la entrega generosa a los demás</li>
+                </ul>
+                <ul className="space-y-5 self-center">
+                <li><strong>• Preparación para el trabajo:</strong> Valorar el estudio bien hecho y el espíritu de servicio</li>
+                <li><strong>• Enseñar a vivir y a convivir:</strong> Cultivar valores, virtudes y habilidades interpersonales</li>
+                <li><strong>• Desarrollo físico y deportivo:</strong> Fomentar la sana competencia, la fortaleza y la constancia</li>
+              </ul>
+            </div>
+          </InfoSection>
+
+          {/* Educational Project */}
           <InfoSection title="Proyecto Educativo" icon={GraduationCap}>
-            <div className="space-y-6">
+            <div className="space-y-9">
               <div>
                 <h3 className="font-bold text-lg mb-3">Educación Preescolar</h3>
-                <p className="mb-3">El Preescolar Albamar – Montemar se lleva a cabo en conjunto con el Colegio Montemar y funciona en las instalaciones del Colegio Albamar. Los cursos son mixtos y abarcan desde Playgroup hasta Kínder.</p>
-                <p className="mb-3">Con el fin de promover un aprendizaje temprano significativo, el preescolar utiliza la metodología PEIS, un enfoque dinámico, atractivo y personalizado que busca desarrollar al máximo las capacidades individuales de cada niño. Las principales características de esta metodología son:</p>
-                <ul className="space-y-2 ml-4">
+                <p className="mb-5">El Preescolar Albamar – Montemar se lleva a cabo en conjunto con el Colegio Montemar y funciona en las instalaciones del Colegio Albamar. Los cursos son mixtos y abarcan desde Playgroup hasta Kínder.</p>
+                <p className="mb-5">Con el fin de promover un aprendizaje temprano significativo, el preescolar utiliza la metodología PEIS, un enfoque dinámico, atractivo y personalizado que busca desarrollar al máximo las capacidades individuales de cada niño. Las principales características de esta metodología son:</p>
+                <ul className="space-y-4 ml-4">
                   <li><strong>• Desarrollo integral:</strong> Despierta el interés por las letras, los números, el inglés, el arte, la música, el juego y el deporte</li>
                   <li><strong>• Aprendizaje activo:</strong> Las clases en ambiente acogedor y alegre que favorece el aprendizaje, promoviendo la autonomía, responsabilidad y madurez</li>
                   <li><strong>• Protagonismo:</strong> Cada niño es gestor de su propio aprendizaje, promoviendo su curiosidad y creatividad, por lo que se respeta sus ritmos, intereses, habilidades y destrezas</li>
@@ -268,30 +278,16 @@ const SchoolProfile = () => {
                 <h3 className="font-bold text-lg mb-3">Educación Básica y Media</h3>
                 <p>Se dispone de planes y programas propios que se complementan con la malla curricular propuesta por el Ministerio de Educación. Estos componentes son descritos en los puntos que vienen a continuación.</p>
               </div>
-
-              <div>
-                <h3 className="font-bold text-lg mb-3">Principios educativos</h3>
-                <ul className="space-y-2">
-                  <li><strong>• Desarrollo de la inteligencia:</strong> Enseñando a pensar y aprender con la alumna como protagonista de su formación</li>
-                  <li><strong>• Educación de la voluntad:</strong> Enseñar a buscar siempre la verdad y el bien</li>
-                  <li><strong>• Educación espiritual:</strong> Basada en las enseñanzas del Magisterio de la Iglesia Católica</li>
-                  <li><strong>• Educación en el amor humano:</strong> Promoviendo la entrega generosa a los demás</li>
-                  <li><strong>• Preparación para el trabajo:</strong> Valorando el estudio bien hecho y el espíritu de servicio</li>
-                  <li><strong>• Enseñar a vivir y a convivir:</strong> Cultivando valores, virtudes y habilidades interpersonales</li>
-                  <li><strong>• Desarrollo físico y deportivo:</strong> Fomentando la sana competencia, la fortaleza y la constancia</li>
-                </ul>
-              </div>
             </div>
           </InfoSection>
 
           {/* Languages */}
           <InfoSection title="Idiomas" icon={Globe}>
-            <div className="space-y-4">
+            <div className="space-y-5">
               <h3 className="font-bold text-lg mb-3">Inglés</h3>
-              <p className="mb-4">El inglés en el colegio se enseña a través del enfoque comunicativo, un método que prioriza la comunicación y el uso del idioma en situaciones prácticas y significativas. Este enfoque busca desarrollar las cuatro habilidades lingüísticas —leer, escribir, escuchar y hablar— al mismo tiempo que fomenta el pensamiento crítico.</p>
-              <p className="mb-4">La enseñanza del inglés varía según la etapa escolar, adaptándose al nivel de desarrollo de las alumnas:</p>
+              <p className="mb-4">Se enseña a través del enfoque comunicativo, un método que prioriza la comunicación y el uso del idioma en situaciones prácticas y significativas. Este enfoque busca desarrollar las cuatro habilidades lingüísticas —leer, escribir, escuchar y hablar— al mismo tiempo que fomenta el pensamiento crítico.</p>
               
-              <ul className="space-y-3">
+              <ul className="space-y-4 ml-4">
                 <li><strong>• Preescolar:</strong> Introducción al bilingüismo con rutinas diarias en inglés, como saludos y rezos. Además, asignaturas como Ciencias, Matemáticas, Música, Arte y Fónica se imparten en inglés. Cada clase cuenta con al menos una educadora bilingüe.</li>
                 <li><strong>• 1ero a 4to básico:</strong> 8 horas semanales de inglés. Asignaturas como Ciencias, Historia (hasta 3° básico) y Arte se imparten en inglés.</li>
                 <li><strong>• 5to a 8vo básico:</strong> 7 horas semanales de inglés, con clases organizadas en grupos personalizados según el nivel de las alumnas.</li>
@@ -304,9 +300,7 @@ const SchoolProfile = () => {
           {/* Sports */}
           <InfoSection title="Deporte" icon={Dumbbell}>
             <div className="space-y-4">
-              <p className="mb-4">El desarrollo físico y deportivo es uno de los principios educativos del colegio, por ello, la actividad física es incorporada en la formación desde preescolar hasta los cursos superiores:</p>
-              
-              <ul className="space-y-3">
+              <ul className="space-y-4 mt-6 ml-4">
                 <li><strong>• Deporte en preescolar:</strong> 1 hora diaria de actividad física, con circuitos neuromotores y actividades deportivos adaptados a su edad.</li>
                 <li><strong>• Deporte desde primero básico:</strong> 4 horas semanales de actividad física, que incluyen educación física y la práctica de deportes como hockey, atletismo, vóleibol y gimnasia artística.</li>
                 <li><strong>• Selecciones deportivas:</strong> Algunas disciplinas cuentan con selecciones deportivas en las que las alumnas pueden participar como actividad extraprogramática.</li>
