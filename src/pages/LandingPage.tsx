@@ -22,13 +22,13 @@ const LandingPage = () => {
         {/* Logo/Title */}
         <div className="mb-12">
           <h1 className="text-6xl font-bold text-gray-900 mb-6">
-            Eduglia
+            TuColegio
           </h1>
           <p className="text-2xl text-gray-600 mb-4">
             ¿Buscas el primer colegio para tus hijos?
           </p>
           <p className="text-xl text-gray-500 italic mb-8">
-            Hazlo fácil con Eduglia
+            Hazlo fácil con TuColegio
           </p>
         </div>
 
