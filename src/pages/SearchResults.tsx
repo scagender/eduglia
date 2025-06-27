@@ -77,26 +77,27 @@ const SearchResults = () => {
     });
   };
 
-  const fetchSchoolReviews = async (schoolId: number): Promise<number> => {
+  const fetchSchoolReviews = async (schoolId: number): Promise<{averageRating: number, reviewCount: number}> => {
     try {
       const response = await fetch(`https://tucolegioapi.onrender.com/api/colegios/${schoolId}/reviews`);
       if (!response.ok) {
         console.warn(`Failed to fetch reviews for school ${schoolId}`);
-        return 0;
+        return {averageRating: 0, reviewCount: 0};
       }
       
       const data = await response.json();
       const reviews = data.items || [];
       
       if (reviews.length === 0) {
-        return 0;
+        return {averageRating: 0, reviewCount: 0};
       }
       
       const totalRating = reviews.reduce((sum: number, review: any) => sum + (review.rating || 0), 0);
-      return totalRating / reviews.length;
+      const averageRating = totalRating / reviews.length;
+      return {averageRating, reviewCount: reviews.length};
     } catch (error) {
       console.error(`Error fetching reviews for school ${schoolId}:`, error);
-      return 0;
+      return {averageRating: 0, reviewCount: 0};
     }
   };
 
@@ -111,7 +112,7 @@ const SearchResults = () => {
           // Fetch reviews for each school and process the data
           const processedSchools = await Promise.all(
             filteredData.map(async (item) => {
-              const reviewRating = await fetchSchoolReviews(item.colegio.id);
+              const {averageRating, reviewCount} = await fetchSchoolReviews(item.colegio.id);
               
               return {
                 id: item.colegio.id.toString(),
@@ -119,8 +120,8 @@ const SearchResults = () => {
                 location: `${item.colegio.direccion}, ${item.colegio.comuna}, ${item.colegio.region}`,
                 gender: "Mixto", // Default value as API doesn't provide this
                 religion: "Laico", // Default value as API doesn't provide this
-                rating: reviewRating > 0 ? reviewRating : item.colegio.google_rating_promedio || 0,
-                reviewCount: item.colegio.google_total_reviews || 0,
+                rating: averageRating > 0 ? averageRating : item.colegio.google_rating_promedio,
+                reviewCount: reviewCount || 0,
                 image: "/placeholder.svg",
                 description: `Página oficial: ${item.colegio.pagina_web}`,
                 distance: `${item.distancia_km.toFixed(1)} km`,
