@@ -54,7 +54,6 @@ const SearchMap = ({ address, schools }: SearchMapProps) => {
         
         if (data.encontrado) {
           setAddressCoords({ lat: data.latitud, lon: data.longitud });
-          console.log(data.latitud, data.longitud)
         }
       } catch (error) {
         console.error("Error geocoding address:", error);
@@ -72,7 +71,6 @@ const SearchMap = ({ address, schools }: SearchMapProps) => {
       const coords = [];
       
       for (const school of schools.slice(0, 10)) { // Limitar a 10 colegios para no saturar
-        console.log(school.location)
         try {
             const response = await fetch(`https://tucolegioapi.onrender.com/api/geocodificar?direccion=${encodeURIComponent(school.location)}`, {
             method: "POST",
@@ -106,8 +104,9 @@ const SearchMap = ({ address, schools }: SearchMapProps) => {
 
   // Inicializar el mapa
   useEffect(() => {
+    console.log("Intento")
     if (!mapRef.current || !addressCoords) return;
-
+    console.log("Pasa")
     // Limpiar mapa existente
     if (mapInstanceRef.current) {
       mapInstanceRef.current.setTarget(undefined);
