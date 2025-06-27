@@ -45,6 +45,7 @@ const SearchMap = ({ address, schools }: SearchMapProps) => {
       try {
         const response = await fetch(`https://tucolegioapi.onrender.com/api/geocodificar?direccion=${encodeURIComponent(address)}`);
         const data: GeocodingResponse = await response.json();
+        console.log(data)
         
         if (data.encontrado) {
           setAddressCoords({ lat: data.latitud, lon: data.longitud });
