@@ -1,9 +1,20 @@
-import { MapPin } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import "ol/ol.css";
+import Map from "ol/Map";
+import View from "ol/View";
+import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer";
+import { OSM } from "ol/source";
+import { Vector as VectorSource } from "ol/source";
+import { Feature } from "ol";
+import Point from "ol/geom/Point";
+import { fromLonLat } from "ol/proj";
+import { Style, Icon } from "ol/style";
+import { defaults as defaultControls } from "ol/control";
 
 interface School {
   id: string;
   name: string;
-  location: string;
+  location: string; // dirección
   rating: number;
 }
 
@@ -12,89 +23,117 @@ interface SearchMapProps {
   schools: School[];
 }
 
-const SearchMap = ({ address, schools }: SearchMapProps) => {
-  // Posiciones predefinidas (visuales)
-  const staticPositions = [
-    { top: '35%', left: '40%' },
-    { top: '60%', left: '25%' },
-    { top: '30%', left: '70%' },
-    { top: '70%', left: '65%' }
-  ];
+interface GeocodingResult {
+  direccion: string;
+  latitud: number;
+  longitud: number;
+  encontrado: boolean;
+}
 
-  // Si hay más colegios que posiciones fijas, genera adicionales alrededor del centro
-  const generateDynamicPosition = (index: number) => {
-    const angle = (index / schools.length) * 2 * Math.PI;
-    const radius = 20 + (index % 3) * 10; // distancia radial
-    const centerX = 50;
-    const centerY = 50;
-    const x = centerX + radius * Math.cos(angle);
-    const y = centerY + radius * Math.sin(angle);
-    return { top: `${y}%`, left: `${x}%` };
-  };
+const SearchMap = ({ address, schools }: SearchMapProps) => {
+  const mapRef = useRef<HTMLDivElement | null>(null);
+  const mapInstance = useRef<Map | null>(null);
+  const [addressCoords, setAddressCoords] = useState<[number, number] | null>(null);
+  const [schoolCoords, setSchoolCoords] = useState<Record<string, [number, number]>>({});
+
+  useEffect(() => {
+    const geocode = async (direccion: string): Promise<GeocodingResult | null> => {
+      try {
+        const res = await fetch(`https://tucolegioapi.onrender.com/api/geocodificar?direccion=${encodeURIComponent(direccion)}`);
+        if (!res.ok) throw new Error("Fallo la solicitud");
+        const data: GeocodingResult = await res.json();
+        return data.encontrado ? data : null;
+      } catch (error) {
+        console.error("Error geocodificando:", error);
+        return null;
+      }
+    };
+
+    const loadCoordinates = async () => {
+      const addressResult = await geocode(address);
+      if (addressResult) {
+        setAddressCoords([addressResult.longitud, addressResult.latitud]);
+      }
+
+      const coords: Record<string, [number, number]> = {};
+      for (const school of schools) {
+        const result = await geocode(school.location);
+        if (result) {
+          coords[school.id] = [result.longitud, result.latitud];
+        }
+      }
+      setSchoolCoords(coords);
+    };
+
+    loadCoordinates();
+  }, [address, schools]);
+
+  useEffect(() => {
+    if (!mapRef.current || !addressCoords) return;
+
+    const vectorSource = new VectorSource();
+
+    // Dirección buscada
+    const userFeature = new Feature({
+      geometry: new Point(fromLonLat(addressCoords)),
+    });
+
+    userFeature.setStyle(
+      new Style({
+        image: new Icon({
+          src: "/icons/center-marker.png", // ícono personalizado
+          anchor: [0.5, 1],
+          scale: 1.3,
+        }),
+      })
+    );
+    vectorSource.addFeature(userFeature);
+
+    // Marcadores de colegios
+    Object.entries(schoolCoords).forEach(([schoolId, [lon, lat]]) => {
+      const schoolFeature = new Feature({
+        geometry: new Point(fromLonLat([lon, lat])),
+        name: schoolId,
+      });
+
+      schoolFeature.setStyle(
+        new Style({
+          image: new Icon({
+            src: "/icons/school-marker.png",
+            anchor: [0.5, 1],
+            scale: 1,
+          }),
+        })
+      );
+
+      vectorSource.addFeature(schoolFeature);
+    });
+
+    const vectorLayer = new VectorLayer({
+      source: vectorSource,
+    });
+
+    mapInstance.current = new Map({
+      target: mapRef.current,
+      layers: [
+        new TileLayer({ source: new OSM() }),
+        vectorLayer,
+      ],
+      view: new View({
+        center: fromLonLat(addressCoords),
+        zoom: 13,
+      }),
+      controls: defaultControls(),
+    });
+
+    return () => {
+      mapInstance.current?.setTarget(null);
+    };
+  }, [addressCoords, schoolCoords]);
 
   return (
-    <div className="h-full bg-gray-100 relative overflow-hidden">
-      {/* Mapa base */}
-      <div className="absolute inset-0 bg-gradient-to-br from-green-100 to-blue-100">
-        {/* Patrón de cuadrícula */}
-        <div className="absolute inset-0 opacity-20">
-          <svg width="100%" height="100%">
-            <defs>
-              <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
-                <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#94a3b8" strokeWidth="1" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" />
-          </svg>
-        </div>
-
-        {/* Simulación de calles */}
-        <div className="absolute top-1/4 left-0 right-0 h-1 bg-gray-300 opacity-60"></div>
-        <div className="absolute top-3/4 left-0 right-0 h-1 bg-gray-300 opacity-60"></div>
-        <div className="absolute left-1/3 top-0 bottom-0 w-1 bg-gray-300 opacity-60"></div>
-        <div className="absolute left-2/3 top-0 bottom-0 w-1 bg-gray-300 opacity-60"></div>
-
-        {/* Marcador central - Dirección buscada */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <div className="bg-red-500 rounded-full p-2 shadow-lg">
-            <MapPin className="w-6 h-6 text-white" />
-          </div>
-          <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white px-3 py-1 rounded shadow-md text-xs font-medium whitespace-nowrap">
-            {address}
-          </div>
-        </div>
-
-        {/* Marcadores de colegios */}
-        {schools.map((school, index) => {
-          const position = staticPositions[index] || generateDynamicPosition(index);
-          return (
-            <div
-              key={school.id}
-              className="absolute transform -translate-x-1/2 -translate-y-1/2"
-              style={{ top: position.top, left: position.left }}
-            >
-              <div className="bg-blue-600 rounded-full p-2 shadow-lg hover:bg-blue-700 cursor-pointer transition-colors">
-                <div className="w-3 h-3 bg-white rounded-full"></div>
-              </div>
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 bg-white px-2 py-1 rounded shadow-md text-xs font-medium whitespace-nowrap max-w-32 truncate">
-                {school.name}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Controles de zoom (decorativos) */}
-      <div className="absolute top-4 right-4 bg-white rounded shadow-md">
-        <button className="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100">+</button>
-        <div className="border-t border-gray-200"></div>
-        <button className="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100">-</button>
-      </div>
-
-      {/* Atribución del mapa */}
-      <div className="absolute bottom-2 left-2 text-xs text-gray-500 bg-white/80 px-2 py-1 rounded">
-        Vista previa del mapa
-      </div>
+    <div className="w-full h-full">
+      <div ref={mapRef} className="w-full h-full" />
     </div>
   );
 };
