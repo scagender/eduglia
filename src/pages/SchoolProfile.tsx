@@ -181,7 +181,7 @@ const SchoolProfile = () => {
         <SchoolBanner 
           name={schoolData.nombre}
           location={`${schoolData.direccion}, ${schoolData.comuna}, ${schoolData.region}`}
-          rating={0}
+          rating={schoolData.google_rating_promedio}
           reviewCount={schoolData.google_total_reviews}
         />
 
