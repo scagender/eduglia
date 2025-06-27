@@ -74,7 +74,13 @@ const SearchMap = ({ address, schools }: SearchMapProps) => {
       
       for (const school of schools.slice(0, 10)) { // Limitar a 10 colegios para no saturar
         try {
-          const response = await fetch(`https://tucolegioapi.onrender.com/api/geocodificar?direccion=${encodeURIComponent(school.location)}`);
+          const response = await fetch("https://tucolegioapi.onrender.com/api/geocodificar", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ direccion: school.location }),
+          });
           const data: GeocodingResponse = await response.json();
           
           if (data.encontrado) {
