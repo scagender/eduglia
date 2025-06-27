@@ -47,16 +47,27 @@ const SchoolBanner = ({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3">
-            <Button variant="outline" size="lg" className="flex items-center gap-2">
+          <div className="flex flex-col lg:flex-row gap-3 w-full lg:w-auto">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="flex items-center gap-2 w-full lg:w-auto"
+            >
               <Heart className="w-4 h-4" />
               Guardar
             </Button>
-            <Button variant="outline" size="lg" className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="flex items-center gap-2 w-full lg:w-auto"
+            >
               <Share2 className="w-4 h-4" />
               Compartir
             </Button>
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+            <Button 
+              size="lg" 
+              className="bg-blue-600 hover:bg-blue-700 w-full lg:w-auto"
+            >
               Contactar Colegio
             </Button>
           </div>
