@@ -283,7 +283,7 @@ const SchoolProfile = () => {
             <h3 className="text-xl font-semibold mb-4">Calificación Promedio</h3>
             <div className="flex items-center justify-center gap-4">
               <StarRating rating={schoolData.google_rating_promedio} size="lg" />
-              <span className="text-3xl font-bold text-gray-900">{(schoolData.google_rating_promedio || 0).toFixed(1)}</span>
+              <span className="text-3xl font-bold text-gray-900">{(schoolData.google_rating_promedio || 0)}</span>
               <span className="text-gray-500">({schoolData.google_total_reviews} reseñas)</span>
             </div>
           </div>
