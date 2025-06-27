@@ -28,7 +28,7 @@ const ReviewsSection = ({ reviewsData }: ReviewsSectionProps) => {
     rating: review.rating,
     date: review.fecha_relativa || new Date(review.created_at).toLocaleDateString(),
     recommendation: review.rating >= 4 ? "Sí, totalmente" : review.rating >= 2 ? "Sí, parcialmente" : "No lo recomiendo",
-    bestAspect: review.texto || "No se proporcionaron detalles",
+    bestAspect: review.texto || " ",
     improvements: "", // Este campo no viene en la API, podrías omitirlo o pedirlo
     helpful: 0 // Podrías obtener este dato si la API lo proporciona
   })) || [];
@@ -57,7 +57,6 @@ const ReviewsSection = ({ reviewsData }: ReviewsSectionProps) => {
                     <div className="flex items-center gap-2 mb-1">
                       <h4 className="font-medium text-gray-900">{review.author}</h4>
                       <span className="text-sm text-gray-500">•</span>
-                      <span className="text-sm text-gray-500">{review.role}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <StarRating rating={review.rating} size="sm" showNumber={false} />
@@ -73,15 +72,7 @@ const ReviewsSection = ({ reviewsData }: ReviewsSectionProps) => {
                       {review.bestAspect}
                     </p>
                   </div>
-                  
-                  {review.recommendation && (
-                    <div>
-                      <h5 className="font-bold text-sm text-gray-800 mb-2">Recomendación</h5>
-                      <p className="text-gray-700 leading-relaxed">
-                        {review.recommendation}
-                      </p>
-                    </div>
-                  )}
+
                 </div>
                 
                 <div className="flex items-center gap-4 mt-4">
