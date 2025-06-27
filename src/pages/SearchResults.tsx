@@ -59,27 +59,77 @@ const SearchResults = () => {
   const address = searchParams.get("direccion") || "";
   const range = searchParams.get("rango") || "10";
 
+  const filterSchools = (apiData: ApiSchool[]): ApiSchool[] => {
+    return apiData.filter(item => {
+      const colegio = item.colegio;
+      // Filter by dependencia
+      if (colegio.dependencia !== "Particular No Subvencionado") {
+        return false;
+      }
+      
+      // Filter out schools with excluded words in their name
+      const excludedWords = ["Jardin", "Sala Cuna", "Escuela De Parvulos"];
+      const nombreLower = colegio.nombre.toLowerCase();
+      
+      return !excludedWords.some(word => 
+        nombreLower.includes(word.toLowerCase())
+      );
+    });
+  };
+
+  const fetchSchoolReviews = async (schoolId: number): Promise<number> => {
+    try {
+      const response = await fetch(`https://tucolegioapi.onrender.com/api/colegios/${schoolId}/reviews`);
+      if (!response.ok) {
+        console.warn(`Failed to fetch reviews for school ${schoolId}`);
+        return 0;
+      }
+      
+      const data = await response.json();
+      const reviews = data.items || [];
+      
+      if (reviews.length === 0) {
+        return 0;
+      }
+      
+      const totalRating = reviews.reduce((sum: number, review: any) => sum + (review.rating || 0), 0);
+      return totalRating / reviews.length;
+    } catch (error) {
+      console.error(`Error fetching reviews for school ${schoolId}:`, error);
+      return 0;
+    }
+  };
+
   useEffect(() => {
-    const loadSearchResults = () => {
+    const loadSearchResults = async () => {
       try {
         const savedResults = sessionStorage.getItem("searchResults");
         if (savedResults) {
           const apiData: ApiSchool[] = JSON.parse(savedResults);
-          const processedSchools = apiData.map((item) => ({
-            id: item.colegio.id.toString(),
-            name: item.colegio.nombre,
-            location: `${item.colegio.direccion}, ${item.colegio.comuna}, ${item.colegio.region}`,
-            gender: "Mixto", // Default value as API doesn't provide this
-            religion: item.colegio.dependencia === "Particular Subvencionado" || 
-                     item.colegio.dependencia === "Particular Pagado" ? "Católico" : "Laico",
-            rating: item.colegio.google_rating_promedio || 0,
-            reviewCount: item.colegio.google_total_reviews || 0,
-            image: "/placeholder.svg",
-            description: `${item.colegio.nivel_ensenanza}. Matrícula: ${item.colegio.matricula_total} estudiantes. ${item.colegio.numero_docentes} docentes.`,
-            distance: `${item.distancia_km.toFixed(1)} km`,
-            latitude: item.colegio.latitud,
-            longitude: item.colegio.longitud,
-          }));
+          const filteredData = filterSchools(apiData);
+          
+          // Fetch reviews for each school and process the data
+          const processedSchools = await Promise.all(
+            filteredData.map(async (item) => {
+              const reviewRating = await fetchSchoolReviews(item.colegio.id);
+              
+              return {
+                id: item.colegio.id.toString(),
+                name: item.colegio.nombre,
+                location: `${item.colegio.direccion}, ${item.colegio.comuna}, ${item.colegio.region}`,
+                gender: "Mixto", // Default value as API doesn't provide this
+                religion: "Laico", // Default value as API doesn't provide this
+                rating: reviewRating > 0 ? reviewRating : item.colegio.google_rating_promedio || 0,
+                reviewCount: item.colegio.google_total_reviews || 0,
+                image: "/placeholder.svg",
+                description: `Página oficial: ${item.colegio.pagina_web}`,
+                distance: `${item.distancia_km.toFixed(1)} km`,
+                latitude: item.colegio.latitud,
+                longitude: item.colegio.longitud,
+              };
+            })
+          );
+          
           setSchools(processedSchools);
         }
       } catch (error) {
@@ -133,7 +183,7 @@ const SearchResults = () => {
             <div className="flex-1">
               <h1 className="text-xl font-semibold">Colegios cerca de "{address}"</h1>
               <p className="text-sm text-gray-600">
-                Radio de búsqueda: {range} km • {schools.length} resultados encontrados
+                Radio de búsqueda: {range} km • {schools.length} resultados encontrados (solo Particular No Subvencionado)
               </p>
             </div>
             {/* Mobile toggle button */}
@@ -177,7 +227,7 @@ const SearchResults = () => {
           <div className="p-4 space-y-4">
             {schools.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-gray-600">No se encontraron colegios en esta área.</p>
+                <p className="text-gray-600">No se encontraron colegios particulares no subvencionados en esta área.</p>
                 <Link to="/">
                   <Button className="mt-4">Realizar nueva búsqueda</Button>
                 </Link>
