@@ -43,12 +43,11 @@ const SearchMap = ({ address, schools }: SearchMapProps) => {
   useEffect(() => {
     const geocodeAddress = async () => {
       try {
-          const response = await fetch("https://tucolegioapi.onrender.com/api/geocodificar", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ direccion: address }),
+          const response = await fetch(`https://tucolegioapi.onrender.com/api/geocodificar?direccion=${encodeURIComponent(address)}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            }
         });
         const data: GeocodingResponse = await response.json();
         
@@ -75,12 +74,11 @@ const SearchMap = ({ address, schools }: SearchMapProps) => {
       for (const school of schools.slice(0, 10)) { // Limitar a 10 colegios para no saturar
         console.log(school.location)
         try {
-            const response = await fetch("https://tucolegioapi.onrender.com/api/geocodificar", {
+            const response = await fetch(`https://tucolegioapi.onrender.com/api/geocodificar?direccion=${encodeURIComponent(school.location)}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ direccion: school.location }),
+            }
           });
           const data: GeocodingResponse = await response.json();
           
