@@ -74,27 +74,66 @@ interface SchoolData {
   resultados_simce: any[];
 }
 
-const fetchSchoolReviews = async (schoolId: number): Promise<{averageRating: number, reviewCount: number}> => {
+interface ApiReview {
+  id: number;
+  rating: number;
+  texto: string;
+  autor: string;
+  fecha_relativa: string;
+  idioma: string;
+  created_at: string;
+}
+
+interface ReviewsResponse {
+  items: ApiReview[];
+  count: number;
+}
+
+interface SchoolReviewsResult {
+  averageRating: number;
+  reviewCount: number;
+  reviews: ApiReview[];
+}
+
+const fetchSchoolReviews = async (schoolId: number): Promise<SchoolReviewsResult> => {
   try {
     const response = await fetch(`https://tucolegioapi.onrender.com/api/colegios/${schoolId}/reviews`);
     if (!response.ok) {
       console.warn(`Failed to fetch reviews for school ${schoolId}`);
-      return {averageRating: 0, reviewCount: 0};
+      return {
+        averageRating: 0,
+        reviewCount: 0,
+        reviews: []
+      };
     }
     
-    const data = await response.json();
+    const data: ReviewsResponse = await response.json();
     const reviews = data.items || [];
     
     if (reviews.length === 0) {
-      return {averageRating: 0, reviewCount: 0};
+      return {
+        averageRating: 0,
+        reviewCount: 0,
+        reviews: []
+      };
     }
     
-    const totalRating = reviews.reduce((sum: number, review: any) => sum + (review.rating || 0), 0);
+    const totalRating = reviews.reduce((sum: number, review) => sum + (review.rating || 0), 0);
     const averageRating = totalRating / reviews.length;
-    return {averageRating, reviewCount: reviews.length};
+    
+    return {
+      averageRating,
+      reviewCount: data.count || reviews.length,
+      reviews
+    };
+    
   } catch (error) {
     console.error(`Error fetching reviews for school ${schoolId}:`, error);
-    return {averageRating: 0, reviewCount: 0};
+    return {
+      averageRating: 0,
+      reviewCount: 0,
+      reviews: []
+    };
   }
 };
 
@@ -103,6 +142,7 @@ const SchoolProfile = () => {
   const [schoolData, setSchoolData] = useState<SchoolData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [reviewsData, setReviewsData] = useState<ReviewsResponse | null>(null);
 
   useEffect(() => {
     const fetchSchoolData = async () => {
@@ -115,12 +155,12 @@ const SchoolProfile = () => {
         }
         
         const data = await response.json();
-        const { averageRating, reviewCount } = await fetchSchoolReviews(parseInt(id));
+        const { averageRating, reviewCount, reviews } = await fetchSchoolReviews(parseInt(id));
         setSchoolData({
           ...data,
           google_rating_promedio: averageRating,
           google_total_reviews: reviewCount,
-          reviews: data.reviews || [] // Asegurar que reviews sea un array
+          reviews: reviews
         });
       } catch (error) {
         console.error("Error fetching school data:", error);
@@ -307,7 +347,7 @@ const SchoolProfile = () => {
           )}
 
           {/* Reviews Section */}
-          <ReviewsSection />
+          <ReviewsSection reviewsData={reviewsData} />
 
           {/* Rating Summary */}
           <div className="bg-white rounded-lg shadow-sm border p-6 text-center">
