@@ -42,7 +42,6 @@ const SchoolBanner = ({
 
             <div className="flex items-center gap-4">
               <StarRating rating={rating} size="lg" />
-              <span className="text-lg font-semibold">{rating}</span>
               <span className="text-gray-500">({reviewCount} reseñas)</span>
             </div>
           </div>
