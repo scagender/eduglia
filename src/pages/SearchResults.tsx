@@ -124,7 +124,7 @@ const SearchResults = () => {
                 reviewCount: reviewCount || 0,
                 image: "/placeholder.svg",
                 description: `Página oficial: ${item.colegio.pagina_web}`,
-                distance: `${item.distancia_km.toFixed(1)} km`,
+                distance: `${item.distancia_km} km`,
                 latitude: item.colegio.latitud,
                 longitude: item.colegio.longitud,
               };
