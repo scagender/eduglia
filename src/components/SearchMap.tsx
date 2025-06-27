@@ -116,6 +116,7 @@ const SearchMap = ({ address, schools }: SearchMapProps) => {
     const markers: L.Marker[] = [];
 
     if (addressCoords) {
+      map.setView(addressCoords, 14);
       markers.push(L.marker(addressCoords, { icon: addressIcon }).bindPopup("Tu ubicación").addTo(map));
     }
 
