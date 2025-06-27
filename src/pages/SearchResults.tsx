@@ -292,7 +292,7 @@ const SearchResults = () => {
         </div>
 
         {/* Right Panel - Map */}
-        <div className={`${isMobile ? (showMap ? 'w-full' : 'hidden') : 'w-1/2'}`}>
+        <div className={`${isMobile ? (showMap ? 'w-full' : 'hidden') : 'w-1/2'} bg-gray-100`}>
           <SearchMap address={address} schools={schools} />
         </div>
       </div>
