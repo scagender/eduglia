@@ -166,6 +166,10 @@ const SchoolProfile = () => {
           items: reviews,
           count: reviewCount
         });
+        const nombre = "Albamar";
+        const response2 = await fetch(`https://tucolegioapi.onrender.com/api/colegios?nombre=${encodeURIComponent(nombre)}`);
+        const data2 = await response2.json();
+        console.log(data2)
       } catch (error) {
         console.error("Error fetching school data:", error);
         setError(error instanceof Error ? error.message : "Error desconocido");
