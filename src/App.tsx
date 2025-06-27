@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import SearchResults from "./pages/SearchResults";
 import SchoolProfile from "./pages/SchoolProfile";
+import SchoolProfileMock from "./pages/SchoolProfile copy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/" element={<LandingPage />} />
           <Route path="/resultados" element={<SearchResults />} />
           <Route path="/colegio/:id" element={<SchoolProfile />} />
+          <Route path="/colegio/prueba" element={<SchoolProfileMock />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -49,6 +49,22 @@ interface ProcessedSchool {
   longitude: number;
 }
 
+const staticAlbamar: ProcessedSchool = {
+  id: "albamar",
+  name: "Colegio Albamar",
+  location: "Concón, Chile - V Región",
+  gender: "Femenino",
+  religion: "Católico",
+  rating: 4.7,
+  reviewCount: 142,
+  image: "/placeholder.svg",
+  description:
+    "El Colegio Albamar busca la formación integral de sus alumnas, desarrollando al máximo sus capacidades intelectuales, humanas y espirituales, en un ambiente de libertad responsable y alegría.",
+  distance: "2.3 km",
+  latitude: -32.9365,
+  longitude: -71.5225
+};
+
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
   const [sortBy, setSortBy] = useState("relevancia");
@@ -287,8 +303,61 @@ const SearchResults = () => {
                   </Card>
                 </Link>
               ))
+              
             )}
           </div>
+          {/* Tarjeta estática de Colegio Albamar */}
+<Link to="/colegio/prueba">
+  <Card className="hover:shadow-md transition-shadow cursor-pointer">
+    <CardContent className="p-6">
+      <div className="flex gap-4">
+        {/* School Info */}
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-2">
+            <h3 className="text-lg font-semibold text-gray-900">Colegio Albamar</h3>
+            <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
+              Católico
+            </span>
+          </div>
+
+          <div className="flex items-center gap-4 mb-3 text-sm text-gray-600">
+            <div className="flex items-center gap-1">
+              <MapPin className="w-4 h-4" />
+              <span>Concón, Chile - V Región</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Users className="w-4 h-4" />
+              <span>Femenino</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 mb-3">
+            <StarRating rating={4.7} size="sm" />
+            <span className="text-sm text-gray-600">(142 reseñas)</span>
+            <span className="text-sm text-blue-600 font-medium">2.3 km</span>
+          </div>
+
+          <p className="text-gray-600 text-sm leading-relaxed mb-2">
+            El Colegio Albamar busca la formación integral de sus alumnas, desarrollando al máximo sus capacidades intelectuales, humanas y espirituales, en un ambiente de libertad responsable y alegría...
+          </p>
+
+          <Button variant="link" className="p-0 h-auto text-blue-600 text-sm">
+            Ver más
+          </Button>
+        </div>
+
+        {/* School Image */}
+        <div className="w-24 h-24 bg-gray-200 rounded-lg flex-shrink-0">
+          <img 
+            src="/placeholder.svg" 
+            alt="Colegio Albamar"
+            className="w-full h-full object-cover rounded-lg"
+          />
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+</Link>
         </div>
 
         {/* Right Panel - Map */}
