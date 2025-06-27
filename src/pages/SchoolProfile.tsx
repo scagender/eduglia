@@ -162,6 +162,10 @@ const SchoolProfile = () => {
           google_total_reviews: reviewCount,
           reviews: reviews
         });
+        setReviewsData({
+          items: reviews,
+          count: reviewCount
+        });
       } catch (error) {
         console.error("Error fetching school data:", error);
         setError(error instanceof Error ? error.message : "Error desconocido");
