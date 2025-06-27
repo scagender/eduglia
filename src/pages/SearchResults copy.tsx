@@ -8,47 +8,7 @@ import SearchMap from "@/components/SearchMap";
 import { Link, useSearchParams } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-interface ApiSchool {
-  colegio: {
-    id: number;
-    rbd: string;
-    nombre: string;
-    direccion: string;
-    comuna: string;
-    region: string;
-    telefono: string;
-    email: string;
-    pagina_web: string;
-    dependencia: string;
-    sostenedor: string;
-    nivel_ensenanza: string;
-    matricula_total: number;
-    numero_docentes: number;
-    google_place_id: string;
-    google_rating_promedio: number;
-    google_total_reviews: number;
-    latitud: number;
-    longitud: number;
-  };
-  distancia_km: number;
-  composite_score: number;
-}
-
-interface ProcessedSchool {
-  id: string;
-  name: string;
-  location: string;
-  gender: string;
-  religion: string;
-  rating: number;
-  reviewCount: number;
-  image: string;
-  description: string;
-  distance: string;
-  latitude: number;
-  longitude: number;
-}
-
+// Mock data for demonstration
 const mockSchools = [
   {
     id: "albamar",
