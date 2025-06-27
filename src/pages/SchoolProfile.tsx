@@ -74,6 +74,30 @@ interface SchoolData {
   resultados_simce: any[];
 }
 
+const fetchSchoolReviews = async (schoolId: number): Promise<{averageRating: number, reviewCount: number}> => {
+  try {
+    const response = await fetch(`https://tucolegioapi.onrender.com/api/colegios/${schoolId}/reviews`);
+    if (!response.ok) {
+      console.warn(`Failed to fetch reviews for school ${schoolId}`);
+      return {averageRating: 0, reviewCount: 0};
+    }
+    
+    const data = await response.json();
+    const reviews = data.items || [];
+    
+    if (reviews.length === 0) {
+      return {averageRating: 0, reviewCount: 0};
+    }
+    
+    const totalRating = reviews.reduce((sum: number, review: any) => sum + (review.rating || 0), 0);
+    const averageRating = totalRating / reviews.length;
+    return {averageRating, reviewCount: reviews.length};
+  } catch (error) {
+    console.error(`Error fetching reviews for school ${schoolId}:`, error);
+    return {averageRating: 0, reviewCount: 0};
+  }
+};
+
 const SchoolProfile = () => {
   const { id } = useParams<{ id: string }>();
   const [schoolData, setSchoolData] = useState<SchoolData | null>(null);
@@ -91,7 +115,13 @@ const SchoolProfile = () => {
         }
         
         const data = await response.json();
-        setSchoolData(data);
+        const { averageRating, reviewCount } = await fetchSchoolReviews(parseInt(id));
+        setSchoolData({
+          ...data,
+          google_rating_promedio: averageRating,
+          google_total_reviews: reviewCount,
+          reviews: data.reviews || [] // Asegurar que reviews sea un array
+        });
       } catch (error) {
         console.error("Error fetching school data:", error);
         setError(error instanceof Error ? error.message : "Error desconocido");
@@ -127,6 +157,7 @@ const SchoolProfile = () => {
       </div>
     );
   }
+  
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -150,7 +181,7 @@ const SchoolProfile = () => {
         <SchoolBanner 
           name={schoolData.nombre}
           location={`${schoolData.direccion}, ${schoolData.comuna}, ${schoolData.region}`}
-          rating={schoolData.google_rating_promedio}
+          rating={0}
           reviewCount={schoolData.google_total_reviews}
         />
 

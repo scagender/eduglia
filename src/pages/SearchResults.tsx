@@ -120,7 +120,7 @@ const SearchResults = () => {
                 location: `${item.colegio.direccion}, ${item.colegio.comuna}, ${item.colegio.region}`,
                 gender: "Mixto", // Default value as API doesn't provide this
                 religion: "Laico", // Default value as API doesn't provide this
-                rating: averageRating > 0 ? averageRating : item.colegio.google_rating_promedio,
+                rating: averageRating > 0 ? averageRating : 0,
                 reviewCount: reviewCount || 0,
                 image: "/placeholder.svg",
                 description: `Página oficial: ${item.colegio.pagina_web}`,
