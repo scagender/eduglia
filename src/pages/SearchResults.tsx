@@ -56,8 +56,9 @@ const SearchResults = () => {
   const [schools, setSchools] = useState<ProcessedSchool[]>([]);
   const [loading, setLoading] = useState(true);
   const isMobile = useIsMobile();
-  const address = searchParams.get("direccion") || "";
-  const range = searchParams.get("rango") || "10";
+  const address = searchParams.get("searchAddress") || "";
+  const range = searchParams.get("searchRange") || "10";
+
 
   const filterSchools = (apiData: ApiSchool[]): ApiSchool[] => {
     return apiData.filter(item => {

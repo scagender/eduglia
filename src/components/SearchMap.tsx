@@ -148,7 +148,7 @@ const SearchMap = ({ address, schools }: SearchMapProps) => {
       
       {/* Leyenda */}
       <div className="absolute top-4 left-4 bg-white rounded-lg shadow-md p-3 text-sm z-10">
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-2 ml-5">
           <div className="w-4 h-4 bg-red-500 rounded-full"></div>
           <span>Tu ubicación</span>
         </div>
