@@ -43,7 +43,13 @@ const SearchMap = ({ address, schools }: SearchMapProps) => {
   useEffect(() => {
     const geocodeAddress = async () => {
       try {
-        const response = await fetch(`https://tucolegioapi.onrender.com/api/geocodificar?direccion=${encodeURIComponent(address)}`);
+          const response = await fetch("https://tucolegioapi.onrender.com/api/geocodificar", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ direccion: address }),
+        });
         const data: GeocodingResponse = await response.json();
         console.log(data)
         
