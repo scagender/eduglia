@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from "react";
 import { Map, View } from "ol";
 import TileLayer from "ol/layer/Tile";
@@ -9,7 +8,6 @@ import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import { fromLonLat } from "ol/proj";
 import { Style, Icon, Text, Fill, Stroke } from "ol/style";
-import { MapPin } from "lucide-react";
 
 interface School {
   id: string;
@@ -38,6 +36,7 @@ const SearchMap = ({ address, schools }: SearchMapProps) => {
   const [addressCoords, setAddressCoords] = useState<{ lat: number; lon: number } | null>(null);
   const [schoolCoords, setSchoolCoords] = useState<Array<{ id: string; name: string; lat: number; lon: number }>>([]);
   const [loading, setLoading] = useState(true);
+  const vectorSourceRef = useRef<VectorSource | null>(null);
 
   // Geocodificar la dirección buscada
   useEffect(() => {
@@ -103,129 +102,137 @@ const SearchMap = ({ address, schools }: SearchMapProps) => {
   }, [schools]);
 
   // Inicializar el mapa
-  useEffect(() => {
-    console.log("Intento")
-    if (!mapRef.current || !addressCoords) return;
-    console.log("Pasa")
-    // Limpiar mapa existente
-    if (mapInstanceRef.current) {
-      mapInstanceRef.current.setTarget(undefined);
-    }
+useEffect(() => {
+    if (!mapRef.current) return;
 
-    // Crear capas
     const osmLayer = new TileLayer({
       source: new OSM(),
     });
 
     const vectorSource = new VectorSource();
+    vectorSourceRef.current = vectorSource;
+
     const vectorLayer = new VectorLayer({
       source: vectorSource,
     });
 
-    // Crear el mapa
+    const initialCenter = fromLonLat([-70.6693, -33.4489]); // Santiago por defecto
+    const initialZoom = 12;
+
     const map = new Map({
       target: mapRef.current,
       layers: [osmLayer, vectorLayer],
       view: new View({
-        center: fromLonLat([addressCoords.lon, addressCoords.lat]),
-        zoom: 13,
+        center: initialCenter,
+        zoom: initialZoom,
       }),
     });
 
     mapInstanceRef.current = map;
 
-    // Agregar marcador de la dirección buscada (rojo)
-    const addressFeature = new Feature({
-      geometry: new Point(fromLonLat([addressCoords.lon, addressCoords.lat])),
-      name: address,
-      type: 'address',
-    });
-
-    addressFeature.setStyle(new Style({
-      image: new Icon({
-        anchor: [0.5, 1],
-        src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" fill="#ef4444" stroke="#dc2626" stroke-width="2"/>
-            <circle cx="12" cy="10" r="3" fill="white"/>
-          </svg>
-        `),
-        scale: 1.5,
-      }),
-      text: new Text({
-        text: 'Tu ubicación',
-        offsetY: -35,
-        fill: new Fill({ color: '#000' }),
-        stroke: new Stroke({ color: '#fff', width: 2 }),
-        font: '12px Arial',
-      }),
-    }));
-
-    vectorSource.addFeature(addressFeature);
-
     return () => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.setTarget(undefined);
-      }
+      map.setTarget(undefined);
     };
-  }, [addressCoords, address]);
+  }, []);
 
-  // Agregar marcadores de colegios
+  // Actualizar marcadores (address + schools) y centrar vista cuando cambian coords
   useEffect(() => {
-    if (!mapInstanceRef.current || schoolCoords.length === 0) return;
-
     const map = mapInstanceRef.current;
-    const vectorLayer = map.getLayers().getArray().find(layer => layer instanceof VectorLayer) as VectorLayer<VectorSource>;
-    const vectorSource = vectorLayer.getSource();
+    const vectorSource = vectorSourceRef.current;
 
-    // Limpiar marcadores de colegios existentes
-    const features = vectorSource.getFeatures();
-    const schoolFeatures = features.filter(feature => feature.get('type') !== 'address');
-    schoolFeatures.forEach(feature => vectorSource.removeFeature(feature));
+    if (!map || !vectorSource) return;
 
-    // Agregar nuevos marcadores de colegios (azules)
-    schoolCoords.forEach(school => {
-      const schoolFeature = new Feature({
-        geometry: new Point(fromLonLat([school.lon, school.lat])),
-        name: school.name,
-        type: 'school',
-        id: school.id,
+    vectorSource.clear();
+
+    // Marcador dirección (rojo)
+    if (addressCoords) {
+      const addressFeature = new Feature({
+        geometry: new Point(fromLonLat([addressCoords.lon, addressCoords.lat])),
+        type: "address",
       });
 
-      schoolFeature.setStyle(new Style({
-        image: new Icon({
-          anchor: [0.5, 1],
-          src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" fill="#3b82f6" stroke="#2563eb" stroke-width="2"/>
-              <circle cx="12" cy="10" r="3" fill="white"/>
-            </svg>
-          `),
-          scale: 1,
-        }),
-        text: new Text({
-          text: school.name.length > 20 ? school.name.substring(0, 20) + '...' : school.name,
-          offsetY: -25,
-          fill: new Fill({ color: '#000' }),
-          stroke: new Stroke({ color: '#fff', width: 2 }),
-          font: '10px Arial',
-        }),
-      }));
+      addressFeature.setStyle(
+        new Style({
+          image: new Icon({
+            anchor: [0.5, 1],
+            src:
+              "data:image/svg+xml;charset=utf-8," +
+              encodeURIComponent(`
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" fill="#ef4444" stroke="#dc2626" stroke-width="2"/>
+                  <circle cx="12" cy="10" r="3" fill="white"/>
+                </svg>
+              `),
+            scale: 1.5,
+          }),
+          text: new Text({
+            text: "Tu ubicación",
+            offsetY: -35,
+            fill: new Fill({ color: "#000" }),
+            stroke: new Stroke({ color: "#fff", width: 2 }),
+            font: "12px Arial",
+          }),
+        })
+      );
+
+      vectorSource.addFeature(addressFeature);
+    }
+
+    // Marcadores colegios (azules)
+    schoolCoords.forEach((school) => {
+      const schoolFeature = new Feature({
+        geometry: new Point(fromLonLat([school.lon, school.lat])),
+        type: "school",
+      });
+
+      schoolFeature.setStyle(
+        new Style({
+          image: new Icon({
+            anchor: [0.5, 1],
+            src:
+              "data:image/svg+xml;charset=utf-8," +
+              encodeURIComponent(`
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" fill="#3b82f6" stroke="#2563eb" stroke-width="2"/>
+                  <circle cx="12" cy="10" r="3" fill="white"/>
+                </svg>
+              `),
+            scale: 1,
+          }),
+          text: new Text({
+            text: school.name.length > 20 ? school.name.substring(0, 20) + "..." : school.name,
+            offsetY: -25,
+            fill: new Fill({ color: "#000" }),
+            stroke: new Stroke({ color: "#fff", width: 2 }),
+            font: "10px Arial",
+          }),
+        })
+      );
 
       vectorSource.addFeature(schoolFeature);
     });
 
-    // Ajustar vista para mostrar todos los marcadores
-    if (addressCoords && schoolCoords.length > 0) {
-      const allCoords = [
-        [addressCoords.lon, addressCoords.lat],
-        ...schoolCoords.map(school => [school.lon, school.lat])
-      ];
-      
+    // Ajustar vista para mostrar todos los marcadores si hay alguno
+    if (addressCoords || schoolCoords.length > 0) {
+      let coordsToFit: [number, number][] = [];
+
+      if (addressCoords) {
+        coordsToFit.push([addressCoords.lon, addressCoords.lat]);
+      }
+      coordsToFit = coordsToFit.concat(schoolCoords.map((s) => [s.lon, s.lat]));
+
       const extent = vectorSource.getExtent();
-      map.getView().fit(extent, { padding: [50, 50, 50, 50] });
+
+      if (coordsToFit.length === 1) {
+        // Solo 1 punto, centrarlo con zoom
+        map.getView().setCenter(fromLonLat(coordsToFit[0]));
+        map.getView().setZoom(14);
+      } else if (coordsToFit.length > 1) {
+        map.getView().fit(extent, { padding: [50, 50, 50, 50], maxZoom: 16 });
+      }
     }
-  }, [schoolCoords, addressCoords]);
+
+  }, [addressCoords, schoolCoords]);
 
   if (loading) {
     return (
