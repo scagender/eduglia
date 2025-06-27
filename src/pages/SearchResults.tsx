@@ -184,7 +184,7 @@ const SearchResults = () => {
             <div className="flex-1">
               <h1 className="text-xl font-semibold">Colegios cerca de "{address}"</h1>
               <p className="text-sm text-gray-600">
-                Radio de búsqueda: {range} km • {schools.length} resultados encontrados (solo Particular No Subvencionado)
+                Radio de búsqueda: {range} km • {schools.length} resultados encontrados
               </p>
             </div>
             {/* Mobile toggle button */}

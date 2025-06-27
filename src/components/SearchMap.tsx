@@ -2,16 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-const defaultIcon = L.icon({
-  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-});
-
 const addressIcon = L.icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
   iconSize: [25, 41],
@@ -147,8 +137,8 @@ const SearchMap = ({ address, schools }: SearchMapProps) => {
       <div ref={mapRef} className="w-full h-full z-0" />
       
       {/* Leyenda */}
-      <div className="absolute top-4 left-4 bg-white rounded-lg shadow-md p-3 text-sm z-10">
-        <div className="flex items-center gap-2 mb-2 ml-5">
+      <div className="absolute top-4 left-4 bg-white rounded-lg shadow-md p-3 text-sm z-10 ml-6">
+        <div className="flex items-center gap-2 mb-2">
           <div className="w-4 h-4 bg-red-500 rounded-full"></div>
           <span>Tu ubicación</span>
         </div>
