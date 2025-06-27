@@ -49,71 +49,51 @@ interface ProcessedSchool {
   longitude: number;
 }
 
-const mockSchools = [
-  {
-    id: "albamar",
-    name: "Colegio Albamar",
-    type: "Privado",
-    location: "Concón, Chile - V Región",
-    gender: "Femenino",
-    religion: "Católico",
-    rating: 4.7,
-    reviewCount: 142,
-    image: "/placeholder.svg",
-    description: "El Colegio Albamar busca la formación integral de sus alumnas, desarrollando al máximo sus capacidades intelectuales, humanas y espirituales, en un ambiente de libertad responsable y alegría.",
-    distance: "2.3 km"
-  },
-  {
-    id: "san-patricio",
-    name: "Colegio San Patricio",
-    type: "Privado",
-    location: "Las Condes, Santiago",
-    gender: "Mixto",
-    religion: "Católico",
-    rating: 4.5,
-    reviewCount: 98,
-    image: "/placeholder.svg",
-    description: "Institución educativa comprometida con la excelencia académica y la formación en valores cristianos, ofreciendo una educación integral para el desarrollo pleno de nuestros estudiantes.",
-    distance: "3.7 km"
-  },
-  {
-    id: "villa-maria",
-    name: "Colegio Villa María",
-    type: "Privado",
-    location: "Providencia, Santiago",
-    gender: "Femenino",
-    religion: "Católico",
-    rating: 4.8,
-    reviewCount: 156,
-    image: "/placeholder.svg",
-    description: "Educación de calidad centrada en la formación integral de la mujer, promoviendo el desarrollo académico, personal y espiritual en un ambiente de respeto y excelencia.",
-    distance: "4.1 km"
-  },
-  {
-    id: "los-andes",
-    name: "Colegio Los Andes",
-    type: "Privado",
-    location: "Vitacura, Santiago",
-    gender: "Masculino",
-    religion: "Laico",
-    rating: 4.6,
-    reviewCount: 134,
-    image: "/placeholder.svg",
-    description: "Colegio que busca formar hombres íntegros, líderes con visión global y compromiso social, a través de una educación académica rigurosa y formación en valores universales.",
-    distance: "5.2 km"
-  }
-];
-
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
   const [sortBy, setSortBy] = useState("relevancia");
   const [showMap, setShowMap] = useState(false);
+  const [schools, setSchools] = useState<ProcessedSchool[]>([]);
+  const [loading, setLoading] = useState(true);
   const isMobile = useIsMobile();
   const address = searchParams.get("direccion") || "";
   const range = searchParams.get("rango") || "10";
 
+  useEffect(() => {
+    const loadSearchResults = () => {
+      try {
+        const savedResults = sessionStorage.getItem("searchResults");
+        if (savedResults) {
+          const apiData: ApiSchool[] = JSON.parse(savedResults);
+          const processedSchools = apiData.map((item) => ({
+            id: item.colegio.id.toString(),
+            name: item.colegio.nombre,
+            location: `${item.colegio.direccion}, ${item.colegio.comuna}, ${item.colegio.region}`,
+            gender: "Mixto", // Default value as API doesn't provide this
+            religion: item.colegio.dependencia === "Particular Subvencionado" || 
+                     item.colegio.dependencia === "Particular Pagado" ? "Católico" : "Laico",
+            rating: item.colegio.google_rating_promedio || 0,
+            reviewCount: item.colegio.google_total_reviews || 0,
+            image: "/placeholder.svg",
+            description: `${item.colegio.nivel_ensenanza}. Matrícula: ${item.colegio.matricula_total} estudiantes. ${item.colegio.numero_docentes} docentes.`,
+            distance: `${item.distancia_km.toFixed(1)} km`,
+            latitude: item.colegio.latitud,
+            longitude: item.colegio.longitud,
+          }));
+          setSchools(processedSchools);
+        }
+      } catch (error) {
+        console.error("Error loading search results:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSearchResults();
+  }, []);
+
   const getSortedSchools = () => {
-    let sorted = [...mockSchools];
+    let sorted = [...schools];
     switch (sortBy) {
       case "distancia":
         sorted.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
@@ -126,6 +106,17 @@ const SearchResults = () => {
     }
     return sorted;
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Cargando resultados...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -141,7 +132,9 @@ const SearchResults = () => {
             </Link>
             <div className="flex-1">
               <h1 className="text-xl font-semibold">Colegios cerca de "{address}"</h1>
-              <p className="text-sm text-gray-600">Radio de búsqueda: {range} km</p>
+              <p className="text-sm text-gray-600">
+                Radio de búsqueda: {range} km • {schools.length} resultados encontrados
+              </p>
             </div>
             {/* Mobile toggle button */}
             {isMobile && (
@@ -182,65 +175,74 @@ const SearchResults = () => {
 
           {/* Schools List */}
           <div className="p-4 space-y-4">
-            {getSortedSchools().map((school) => (
-              <Link key={school.id} to={`/colegio/${school.id}`}>
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                  <CardContent className="p-6">
-                    <div className="flex gap-4">
-                      {/* School Info */}
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h3 className="text-lg font-semibold text-gray-900">{school.name}</h3>
-                          <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
-                            {school.religion}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-4 mb-3 text-sm text-gray-600">
-                          <div className="flex items-center gap-1">
-                            <MapPin className="w-4 h-4" />
-                            <span>{school.location}</span>
+            {schools.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-600">No se encontraron colegios en esta área.</p>
+                <Link to="/">
+                  <Button className="mt-4">Realizar nueva búsqueda</Button>
+                </Link>
+              </div>
+            ) : (
+              getSortedSchools().map((school) => (
+                <Link key={school.id} to={`/colegio/${school.id}`}>
+                  <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                    <CardContent className="p-6">
+                      <div className="flex gap-4">
+                        {/* School Info */}
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="text-lg font-semibold text-gray-900">{school.name}</h3>
+                            <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
+                              {school.religion}
+                            </span>
                           </div>
-                          <div className="flex items-center gap-1">
-                            <Users className="w-4 h-4" />
-                            <span>{school.gender}</span>
+
+                          <div className="flex items-center gap-4 mb-3 text-sm text-gray-600">
+                            <div className="flex items-center gap-1">
+                              <MapPin className="w-4 h-4" />
+                              <span>{school.location}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Users className="w-4 h-4" />
+                              <span>{school.gender}</span>
+                            </div>
                           </div>
+
+                          <div className="flex items-center gap-4 mb-3">
+                            <StarRating rating={school.rating} size="sm" />
+                            <span className="text-sm text-gray-600">({school.reviewCount} reseñas)</span>
+                            <span className="text-sm text-blue-600 font-medium">{school.distance}</span>
+                          </div>
+
+                          <p className="text-gray-600 text-sm leading-relaxed mb-2">
+                            {school.description.substring(0, 120)}...
+                          </p>
+
+                          <Button variant="link" className="p-0 h-auto text-blue-600 text-sm">
+                            Ver más
+                          </Button>
                         </div>
 
-                        <div className="flex items-center gap-4 mb-3">
-                          <StarRating rating={school.rating} size="sm" />
-                          <span className="text-sm text-gray-600">({school.reviewCount} reseñas)</span>
-                          <span className="text-sm text-blue-600 font-medium">{school.distance}</span>
+                        {/* School Image */}
+                        <div className="w-24 h-24 bg-gray-200 rounded-lg flex-shrink-0">
+                          <img 
+                            src={school.image} 
+                            alt={school.name}
+                            className="w-full h-full object-cover rounded-lg"
+                          />
                         </div>
-
-                        <p className="text-gray-600 text-sm leading-relaxed mb-2">
-                          {school.description.substring(0, 120)}...
-                        </p>
-
-                        <Button variant="link" className="p-0 h-auto text-blue-600 text-sm">
-                          Ver más
-                        </Button>
                       </div>
-
-                      {/* School Image */}
-                      <div className="w-24 h-24 bg-gray-200 rounded-lg flex-shrink-0">
-                        <img 
-                          src={school.image} 
-                          alt={school.name}
-                          className="w-full h-full object-cover rounded-lg"
-                        />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))
+            )}
           </div>
         </div>
 
         {/* Right Panel - Map */}
         <div className={`${isMobile ? (showMap ? 'w-full' : 'hidden') : 'w-1/2'} bg-gray-100`}>
-          <SearchMap address={address} schools={mockSchools} />
+          <SearchMap address={address} schools={schools} />
         </div>
       </div>
     </div>
