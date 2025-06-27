@@ -56,7 +56,6 @@ const ReviewsSection = ({ reviewsData }: ReviewsSectionProps) => {
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <h4 className="font-medium text-gray-900">{review.author}</h4>
-                      <span className="text-sm text-gray-500">•</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <StarRating rating={review.rating} size="sm" showNumber={false} />
