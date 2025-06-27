@@ -1,13 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { Map, View } from "ol";
-import TileLayer from "ol/layer/Tile";
-import OSM from "ol/source/OSM";
-import VectorLayer from "ol/layer/Vector";
-import VectorSource from "ol/source/Vector";
-import Feature from "ol/Feature";
-import Point from "ol/geom/Point";
-import { fromLonLat } from "ol/proj";
-import { Style, Icon, Text, Fill, Stroke } from "ol/style";
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -25,14 +16,16 @@ const addressIcon = L.icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
-  popupAnchor: [1, -34]
+  popupAnchor: [1, -34],
+  className: 'z-10'
 });
 
 const schoolIcon = L.icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
-  popupAnchor: [1, -34]
+  popupAnchor: [1, -34],
+  className: 'z-10'
 });
 
 interface School {
