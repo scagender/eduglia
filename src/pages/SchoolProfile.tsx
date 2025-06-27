@@ -170,6 +170,19 @@ const SchoolProfile = () => {
         const response2 = await fetch(`https://tucolegioapi.onrender.com/api/colegios?nombre=${encodeURIComponent(nombre)}`);
         const data2 = await response2.json();
         console.log(data2)
+        const response3 = await fetch(
+          `https://tucolegioapi.onrender.com/api/geocodificar?direccion=${encodeURIComponent(
+            'Bosques De Montemar Oriente 1750'
+          )}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data3 = await response3.json();
+        console.log(data3)
       } catch (error) {
         console.error("Error fetching school data:", error);
         setError(error instanceof Error ? error.message : "Error desconocido");
