@@ -49,6 +49,7 @@ const LandingPage = () => {
       }
 
       const data = await response.json();
+      console.log(data)
       
       // Store the results for the SearchResults page
       sessionStorage.setItem("searchResults", JSON.stringify(data));
