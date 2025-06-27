@@ -33,7 +33,7 @@ const StarRating = ({ rating, maxRating = 5, size = "md", showNumber = true }: S
       </div>
       {showNumber && (
         <span className="text-sm font-medium text-gray-700 ml-1">
-          {rating.toFixed(1)}
+          {rating}
         </span>
       )}
     </div>
