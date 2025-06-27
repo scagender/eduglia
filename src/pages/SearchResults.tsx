@@ -117,7 +117,7 @@ const SearchResults = () => {
               return {
                 id: item.colegio.id.toString(),
                 name: item.colegio.nombre,
-                location: `${item.colegio.direccion}, ${item.colegio.comuna}, ${item.colegio.region}`,
+                location: `${item.colegio.direccion}, ${item.colegio.comuna}`,
                 gender: "Mixto", // Default value as API doesn't provide this
                 religion: "Laico", // Default value as API doesn't provide this
                 rating: averageRating > 0 ? averageRating : 0,

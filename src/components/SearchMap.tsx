@@ -51,10 +51,11 @@ const SearchMap = ({ address, schools }: SearchMapProps) => {
           body: JSON.stringify({ direccion: address }),
         });
         const data: GeocodingResponse = await response.json();
-        console.log(data)
+        
         
         if (data.encontrado) {
           setAddressCoords({ lat: data.latitud, lon: data.longitud });
+          console.log(data.latitud, data.longitud)
         }
       } catch (error) {
         console.error("Error geocoding address:", error);
