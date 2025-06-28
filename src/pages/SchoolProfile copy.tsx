@@ -1,7 +1,7 @@
 import SchoolBanner from "@/components/SchoolBanner";
 import PhotoGallery from "@/components/PhotoGallery";
 import InfoSection from "@/components/InfoSection";
-import ReviewsSection from "@/components/ReviewsSection";
+import ReviewsSection from "@/components/ReviewsSection copy";
 import StarRating from "@/components/StarRating";
 import {
   Table,
