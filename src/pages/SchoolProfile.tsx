@@ -244,6 +244,8 @@ const SchoolProfile = () => {
           location={`${schoolData.direccion}, ${schoolData.comuna}, ${schoolData.region}`}
           rating={schoolData.google_rating_promedio}
           reviewCount={schoolData.google_total_reviews}
+          religion={schoolData.orientacion_religiosa}
+          email = {schoolData.email}
         />
 
         {/* Rest of content with spacing */}

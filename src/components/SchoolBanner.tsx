@@ -8,13 +8,17 @@ interface SchoolBannerProps {
   location?: string;
   rating?: number;
   reviewCount?: number;
+  religion?: string;
+  email?: string;
 }
 
 const SchoolBanner = ({ 
   name = "Colegio Albamar", 
   location = "Camino El Alba 12357, Las Condes, Santiago",
   rating = 5.0,
-  reviewCount = 142
+  reviewCount = 142,
+  religion = "Católica",
+  email = "secretariadireccion@colegioalbamar.cl"
 }: SchoolBannerProps) => {
   return (
     <div className="bg-white border-b">
@@ -25,7 +29,7 @@ const SchoolBanner = ({
             <div className="flex items-center gap-3 mb-2">
               <h1 className="text-3xl font-bold text-gray-900">{name}</h1>
               <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                Verificado
+                {religion}
               </span>
             </div>
             
@@ -60,16 +64,27 @@ const SchoolBanner = ({
               variant="outline" 
               size="lg" 
               className="flex items-center gap-2 w-full lg:w-auto"
+              onClick={() => {
+                const url = window.location.href;
+                if (navigator.share) {
+                  navigator.share({
+                    title: "Revisa este colegio en TuColegio",
+                    url
+                  }).catch((err) => console.error("Error al compartir:", err));
+                } else {
+                  navigator.clipboard.writeText(url);
+                  alert("Enlace copiado al portapapeles");
+                }
+              }}
             >
               <Share2 className="w-4 h-4" />
               Compartir
             </Button>
-            <Button 
-              size="lg" 
-              className="bg-blue-600 hover:bg-blue-700 w-full lg:w-auto"
-            >
-              Contactar Colegio
-            </Button>
+            <a href={`mailto:${email}`} className="w-full lg:w-auto">
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 w-full lg:w-auto">
+                Contactar Colegio
+              </Button>
+            </a>
           </div>
         </div>
       </div>
