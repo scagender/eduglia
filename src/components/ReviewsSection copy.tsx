@@ -23,7 +23,7 @@ const ReviewsSection = () => {
       role: "Sí, totalmente",
       rating: 5,
       date: "Hace 2 meses",
-      recommendation: "Sí, totalmente",
+      recommendation: "Lo recomiendas?: Sí, totalmente",
       bestAspect: "Que tiene un muy buen ambiente, siempre velan por el bien y tiene una muy buena formación humana, busca el desarrolló de virtudes e por parte de las alumnas. Además a pesar de ser un colegio católico \"conservador\", no obligan a nadie a hacer nada. Yo creo que de las cosas más importantes es que las profesoras son súper cercanas, siempre buscan que una aprenda, lo que da una motivación muy grande.",
       improvements: "Mmm quizás el apoyar más otras áreas, como deportes y música, pero se entiende que no sea tan así, ya que tiene un enfoque académico de excelencia.",
       helpful: 12
@@ -34,7 +34,7 @@ const ReviewsSection = () => {
       role: "Sí, totalmente",
       rating: 5,
       date: "Hace 3 meses",
-      recommendation: "Sí, totalmente",
+      recommendation: "Lo recomiendas?: Sí, totalmente",
       bestAspect: "Formación académica, valores y el ambiente del colegio. Siempre todos dispuestos a ayudarte.",
       improvements: "Elegir bien a algunas profesoras",
       helpful: 8
@@ -45,7 +45,7 @@ const ReviewsSection = () => {
       role: "Sí, totalmente",
       rating: 5,
       date: "Hace 6 meses",
-      recommendation: "Sí, totalmente",
+      recommendation: "Lo recomiendas?: Sí, totalmente",
       bestAspect: "Formación académica , excelentes profesores y la calidad humana y compañerismo entre las alumnas . Inculcan miy buenos valores .",
       improvements: "No agregar mas alumnas por curso . Mantener una cantidad  de alumnas  por sala, que les permita  aprender y desenvolverse de la mejor forma posible .",
       helpful: 15

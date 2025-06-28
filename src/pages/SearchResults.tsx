@@ -34,6 +34,48 @@ interface ApiSchool {
   composite_score: number;
 }
 
+interface SchoolData {
+  id: number;
+  rbd: string;
+  nombre: string;
+  direccion: string;
+  comuna: string;
+  region: string;
+  telefono: string;
+  email: string;
+  pagina_web: string;
+  dependencia: string;
+  sostenedor: string;
+  nivel_ensenanza: string;
+  matricula_total: number;
+  numero_docentes: number;
+  google_place_id: string;
+  google_rating_promedio: number;
+  google_total_reviews: number;
+  latitud: number;
+  longitud: number;
+  convenio_de_subvencion: string;
+  curso_ingreso_principal: string;
+  orientacion_religiosa: string;
+  promedio_alumnos_curso: number;
+  vacantes_curso_ingreso: number;
+  infraestructura: string;
+  deportes: string;
+  actividades_extraprogramaticas: string;
+  apoyo_aprendizaje: string;
+  pago_matricula: string;
+  pago_mensual: string;
+  becas_disponibles: number;
+  tipo_conexion_internet: string;
+  velocidad_conexion: string;
+  google_nombre: string;
+  google_direccion: string;
+  created_at: string;
+  updated_at: string;
+  reviews: any[];
+  resultados_simce: any[];
+}
+
 interface ProcessedSchool {
   id: string;
   name: string;
@@ -117,6 +159,22 @@ const SearchResults = () => {
     }
   };
 
+  const fetchReligion = async (schoolId: number): Promise<string> => {
+  try {
+    const response = await fetch(`https://tucolegioapi.onrender.com/api/colegios/${schoolId}`);
+    if (!response.ok) {
+      console.warn(`No se pudo cargar la religión del colegio ${schoolId}`);
+      return "Desconocida";
+    }
+
+    const data: SchoolData = await response.json();
+    return data.orientacion_religiosa || "Laico"; // fallback si está vacío o null
+  } catch (error) {
+    console.error(`Error al obtener religión del colegio ${schoolId}:`, error);
+    return "Desconocida";
+  }
+};
+
   useEffect(() => {
     const loadSearchResults = async () => {
       try {
@@ -129,13 +187,14 @@ const SearchResults = () => {
           const processedSchools = await Promise.all(
             filteredData.map(async (item) => {
               const {averageRating, reviewCount} = await fetchSchoolReviews(item.colegio.id);
+              const religion = await fetchReligion(item.colegio.id);
               
               return {
                 id: item.colegio.id.toString(),
                 name: item.colegio.nombre,
                 location: `${item.colegio.direccion}, ${item.colegio.comuna}`,
                 gender: "Mixto", // Default value as API doesn't provide this
-                religion: "Laico", // Default value as API doesn't provide this
+                religion: religion, // Default value as API doesn't provide this
                 rating: averageRating > 0 ? averageRating : 0,
                 reviewCount: reviewCount || 0,
                 image: "/placeholder.svg",
