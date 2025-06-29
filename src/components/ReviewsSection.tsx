@@ -1,6 +1,7 @@
 import { MessageSquare, ThumbsUp } from "lucide-react";
 import StarRating from "./StarRating";
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Review {
   id: number;
@@ -21,6 +22,7 @@ interface ReviewsSectionProps {
 
 const ReviewsSection = ({ reviewsData }: ReviewsSectionProps) => {
   // Transformamos los datos de la API al formato que espera el componente
+  const isMobile = useIsMobile();
   const transformedReviews = reviewsData?.items?.map((review) => ({
     id: review.id,
     author: review.autor || "Anónimo",
@@ -42,7 +44,7 @@ const ReviewsSection = ({ reviewsData }: ReviewsSectionProps) => {
           </div>
           <h2 className="text-xl font-semibold text-gray-900">Reseñas de Padres y Estudiantes</h2>
         </div>
-        <Button variant="outline">
+        <Button variant="outline" size={isMobile ? "sm" : "default"}> 
           Escribir Reseña
         </Button>
       </div>

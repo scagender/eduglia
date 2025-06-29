@@ -46,7 +46,7 @@ const SchoolProfile = () => {
                 <h3 className="font-bold text-lg mb-2">Contacto</h3>
                 <div className="space-y-2">
                   <p>📞 <a href="tel:+56987088718" className="text-blue-600 hover:text-blue-800 underline">+56 9 87088718</a></p>
-                  <p>✉️ <a href="mailto:secretariadireccion@colegioalbamar.cl" className="text-blue-600 hover:text-blue-800 underline">secretariadireccion@colegioalbamar.cl</a></p>
+                  <p>✉️ <a href="mailto:secretariadireccion@colegioalbamar.cl" className="text-blue-600 hover:text-blue-800 underline break-all">secretariadireccion@colegioalbamar.cl</a></p>
                   <p>🌐 www.colegioalbamar.cl</p>
                 </div>
               </div>

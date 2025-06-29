@@ -260,7 +260,7 @@ const SchoolProfile = () => {
                     <p>📞 <a href={`tel:${schoolData.telefono}`} className="text-blue-600 hover:text-blue-800 underline">{schoolData.telefono}</a></p>
                   )}
                   {schoolData.email && (
-                    <p>✉️ <a href={`mailto:${schoolData.email}`} className="text-blue-600 hover:text-blue-800 underline">{schoolData.email}</a></p>
+                    <p>✉️ <a href={`mailto:${schoolData.email}`} className="text-blue-600 hover:text-blue-800 underline break-all">{schoolData.email}</a></p>
                   )}
                   {schoolData.pagina_web && (
                     <p>🌐 <a href={schoolData.pagina_web} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">{schoolData.pagina_web}</a></p>
