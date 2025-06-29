@@ -94,7 +94,7 @@ const LandingPage = () => {
               <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <Input
                 type="text"
-                placeholder="Explora colegios cerca de ti"
+                placeholder="Introduce una dirección"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 className="w-full pl-12 pr-4 py-4 rounded-full border-2 border-gray-200 focus:border-blue-500 text-lg"
