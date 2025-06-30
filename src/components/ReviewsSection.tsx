@@ -44,7 +44,7 @@ const ReviewsSection = ({ reviewsData }: ReviewsSectionProps) => {
           </div>
           <h2 className="text-xl font-semibold text-gray-900">Reseñas de Padres y Estudiantes</h2>
         </div>
-        <Button variant="outline" size={isMobile ? "xs" : "default"}> 
+        <Button variant="outline" className="whitespace-nowrap"> 
           Escribir Reseña
         </Button>
       </div>
