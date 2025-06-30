@@ -114,6 +114,7 @@ const SearchResults = () => {
   const [schools, setSchools] = useState<ProcessedSchool[]>([]);
   const [loading, setLoading] = useState(true);
   const isMobile = useIsMobile();
+  const width = useWindowWidth();
   const address = sessionStorage.getItem("searchAddress") || "";
   const range = sessionStorage.getItem("searchRange") || "10";
 
@@ -174,6 +175,20 @@ const SearchResults = () => {
     return "Desconocida";
   }
 };
+
+  function useWindowWidth() {
+    const [width, setWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+      function handleResize() {
+        setWidth(window.innerWidth);
+      }
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    return width;
+  }
 
   useEffect(() => {
     const loadSearchResults = async () => {
@@ -350,13 +365,15 @@ const SearchResults = () => {
                         </div>
 
                         {/* School Image */}
-                        <div className="w-24 h-24 bg-gray-200 rounded-lg flex-shrink-0">
-                          <img 
-                            src={school.image} 
-                            alt={school.name}
-                            className="w-full h-full object-cover rounded-lg"
-                          />
-                        </div>
+                        {width >= 380 && (
+                          <div className="w-24 h-24 bg-gray-200 rounded-lg flex-shrink-0">
+                            <img 
+                              src={school.image} 
+                              alt={school.name}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          </div>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
