@@ -46,7 +46,7 @@ const ReviewsSection = ({ reviewsData }: ReviewsSectionProps) => {
         </div>
         <Button
           variant="outline"
-          size={isMobile ? "lg" : "default"}
+          size={isMobile ? "xs" : "default"}
         >
           {isMobile ? (
             <>
