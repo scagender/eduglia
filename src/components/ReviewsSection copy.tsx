@@ -2,6 +2,7 @@
 import { MessageSquare, ThumbsUp } from "lucide-react";
 import StarRating from "./StarRating";
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Review {
   id: number;
@@ -16,6 +17,7 @@ interface Review {
 }
 
 const ReviewsSection = () => {
+  const isMobile = useIsMobile();
   const reviews: Review[] = [
     {
       id: 1,
@@ -61,8 +63,18 @@ const ReviewsSection = () => {
           </div>
           <h2 className="text-xl font-semibold text-gray-900">Reseñas de Padres y Estudiantes</h2>
         </div>
-        <Button variant="outline">
-          Escribir Reseña
+        <Button
+          variant="outline"
+          size={isMobile ? "xs" : "default"}
+          className={isMobile ? "ml-3" : undefined}
+        >
+          {isMobile ? (
+            <>
+              Escribir<br />Reseña
+            </>
+          ) : (
+            "Escribir Reseña"
+          )}
         </Button>
       </div>
 
