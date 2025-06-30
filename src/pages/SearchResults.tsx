@@ -422,13 +422,15 @@ const SearchResults = () => {
                   </div>
 
                   {/* School Image */}
-                  <div className="w-24 h-24 bg-gray-200 rounded-lg flex-shrink-0">
-                    <img 
+                  {width >= 380 && (
+                    <div className="w-24 h-24 bg-gray-200 rounded-lg flex-shrink-0">
+                      <img 
                       src="/placeholder.svg" 
                       alt="Colegio Albamar"
                       className="w-full h-full object-cover rounded-lg"
                     />
-                  </div>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
