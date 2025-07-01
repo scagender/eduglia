@@ -28,13 +28,12 @@ const LandingPage = () => {
 
       // Filtrado frontend
       const filtered = colegios.filter((colegio) => {
-        const region = colegio.region?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // quita tildes
+        const region = colegio.region?.toLowerCase()
         const nombreLower = colegio.nombre?.toLowerCase() || "";
         const excludedWords = ["jardin", "sala cuna", "escuela de parvulos"];
 
         return (
-          region?.includes("valparaiso") &&
-          colegio.dependencia === "Particular No Subvencionado" &&
+          region?.includes("DE VALPARAISO") &&
           !excludedWords.some(word => nombreLower.includes(word))
         );
       });
