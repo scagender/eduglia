@@ -33,7 +33,6 @@ const LandingPage = () => {
         const excludedWords = ["jardin", "sala cuna", "escuela de parvulos"];
 
         return (
-          region?.includes("DE VALPARAISO") &&
           !excludedWords.some(word => nombreLower.includes(word))
         );
       });
