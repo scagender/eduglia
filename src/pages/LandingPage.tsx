@@ -27,10 +27,6 @@ const LandingPage = () => {
       const colegios = data.items || [];
 
       const filtered = colegios.filter((colegio) => {
-        if (colegio.dependencia !== "Particular No Subvencionado") {
-          return false;
-        }
-
         const nombreLower = colegio.nombre.toLowerCase();
         const excludedWords = ["Jardin", "Sala Cuna", "Escuela De Parvulos"];
 
