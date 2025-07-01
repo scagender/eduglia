@@ -15,9 +15,9 @@ const LandingPage = () => {
 
   
   useEffect(() => {
-  const fetchColegiosValparaiso = async () => {
+  const fetchAndFilterColegios = async () => {
     try {
-      const response = await fetch("https://tucolegioapi.onrender.com/api/colegios?region=DE VALPARAISO");
+      const response = await fetch("https://tucolegioapi.onrender.com/api/colegios");
 
       if (!response.ok) {
         throw new Error(`Error al obtener colegios: ${response.status}`);
@@ -26,24 +26,28 @@ const LandingPage = () => {
       const data = await response.json();
       const colegios = data.items || [];
 
+      // Filtrado frontend
       const filtered = colegios.filter((colegio) => {
-        const nombreLower = colegio.nombre.toLowerCase();
-        const excludedWords = ["Jardin", "Sala Cuna", "Escuela De Parvulos"];
+        const region = colegio.region?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // quita tildes
+        const nombreLower = colegio.nombre?.toLowerCase() || "";
+        const excludedWords = ["jardin", "sala cuna", "escuela de parvulos"];
 
-        return !excludedWords.some(word => nombreLower.includes(word.toLowerCase()));
+        return (
+          region?.includes("valparaiso") &&
+          colegio.dependencia === "Particular No Subvencionado" &&
+          !excludedWords.some(word => nombreLower.includes(word))
+        );
       });
 
-      // Imprime los nombres válidos en consola
-      filtered.forEach(colegio => {
-        console.log(colegio.nombre);
-      });
+      console.log("Colegios filtrados:", filtered.length);
+      filtered.forEach(colegio => console.log(colegio.nombre));
 
     } catch (error) {
-      console.error("Error al obtener colegios de Valparaíso:", error);
+      console.error("Error al obtener colegios:", error);
     }
   };
 
-  fetchColegiosValparaiso();
+  fetchAndFilterColegios();
 }, []);
   
   
