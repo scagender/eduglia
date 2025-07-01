@@ -6,58 +6,57 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 
+  //const fetchAllColegios = async () => {
+  //let page = 1;
+  //let allItems = [];
+  //let hasMore = true;
+
+  //try {
+    //while (hasMore) {
+      //const response = await fetch(`https://tucolegioapi.onrender.com/api/colegios?page=${page}`);
+      //if (!response.ok) throw new Error(`Error página ${page}`);
+
+      //const data = await response.json();
+      //const items = data.items || [];
+
+      //allItems = [...allItems, ...items];
+      //console.log(`Página ${page} - colegios recibidos: ${items.length}`);
+
+      //hasMore = items.length > 0;
+      //page++;
+    //}
+
+    // Filtrado igual que antes
+    //const filtered = allItems.filter((colegio) => {
+      //const region = colegio.region?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      //const nombreLower = colegio.nombre?.toLowerCase() || "";
+      //const excludedWords = ["jardin", "sala cuna", "escuela de parvulos"];
+
+      //return (
+        //region?.includes("de valparaiso") &&
+        //colegio.dependencia === "Particular No Subvencionado" &&
+        //!excludedWords.some(word => nombreLower.includes(word))
+      //);
+    //});
+
+    //console.log("Colegios filtrados:", filtered.length);
+    //filtered.forEach(colegio => console.log(colegio.nombre));
+
+  //} catch (error) {
+    //console.error("Error obteniendo todas las páginas:", error);
+  //}
+//};
+
+//useEffect(() => {
+  //fetchAllColegios();
+//}, []);
+
 const LandingPage = () => {
   const [address, setAddress] = useState("");
   const [range, setRange] = useState("10");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
-
-  
-  const fetchAllColegios = async () => {
-  let page = 1;
-  let allItems = [];
-  let hasMore = true;
-
-  try {
-    while (hasMore) {
-      const response = await fetch(`https://tucolegioapi.onrender.com/api/colegios?page=${page}`);
-      if (!response.ok) throw new Error(`Error página ${page}`);
-
-      const data = await response.json();
-      const items = data.items || [];
-
-      allItems = [...allItems, ...items];
-      console.log(`Página ${page} - colegios recibidos: ${items.length}`);
-
-      hasMore = items.length > 0;
-      page++;
-    }
-
-    // Filtrado igual que antes
-    const filtered = allItems.filter((colegio) => {
-      const region = colegio.region?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      const nombreLower = colegio.nombre?.toLowerCase() || "";
-      const excludedWords = ["jardin", "sala cuna", "escuela de parvulos"];
-
-      return (
-        region?.includes("valparaiso") &&
-        colegio.dependencia === "Particular No Subvencionado" &&
-        !excludedWords.some(word => nombreLower.includes(word))
-      );
-    });
-
-    console.log("Colegios filtrados:", filtered.length);
-    filtered.forEach(colegio => console.log(colegio.nombre));
-
-  } catch (error) {
-    console.error("Error obteniendo todas las páginas:", error);
-  }
-};
-
-useEffect(() => {
-  fetchAllColegios();
-}, []);
   
   const handleSearch = async () => {
     if (!address.trim()) {
