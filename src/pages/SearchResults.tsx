@@ -121,6 +121,7 @@ const SearchResults = () => {
   const filterSchools = (apiData: ApiSchool[]): ApiSchool[] => {
     return apiData.filter(item => {
       const colegio = item.colegio;
+      console.log(colegio)
       // Filter by dependencia
       if (colegio.dependencia !== "Particular No Subvencionado") {
         return false;
@@ -130,8 +131,6 @@ const SearchResults = () => {
       const excludedWords = ["Jardin", "Sala Cuna", "Escuela De Parvulos"];
       const nombreLower = colegio.nombre.toLowerCase();
 
-      console.log(colegio)
-      
       return !excludedWords.some(word => 
         nombreLower.includes(word.toLowerCase())
       );
