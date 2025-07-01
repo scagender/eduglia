@@ -129,8 +129,6 @@ const SearchResults = () => {
       // Filter out schools with excluded words in their name
       const excludedWords = ["Jardin", "Sala Cuna", "Escuela De Parvulos"];
       const nombreLower = colegio.nombre.toLowerCase();
-
-      console.log(colegio)
       
       return !excludedWords.some(word => 
         nombreLower.includes(word.toLowerCase())

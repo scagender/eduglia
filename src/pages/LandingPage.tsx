@@ -13,6 +13,44 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  
+  useEffect(() => {
+  const fetchColegiosValparaiso = async () => {
+    try {
+      const response = await fetch("https://tucolegioapi.onrender.com/api/colegios?region=DE VALPARAISO");
+
+      if (!response.ok) {
+        throw new Error(`Error al obtener colegios: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const colegios = data.items || [];
+
+      const filtered = colegios.filter((colegio) => {
+        if (colegio.dependencia !== "Particular No Subvencionado") {
+          return false;
+        }
+
+        const nombreLower = colegio.nombre.toLowerCase();
+        const excludedWords = ["Jardin", "Sala Cuna", "Escuela De Parvulos"];
+
+        return !excludedWords.some(word => nombreLower.includes(word.toLowerCase()));
+      });
+
+      // Imprime los nombres válidos en consola
+      filtered.forEach(colegio => {
+        console.log(colegio.nombre);
+      });
+
+    } catch (error) {
+      console.error("Error al obtener colegios de Valparaíso:", error);
+    }
+  };
+
+  fetchColegiosValparaiso();
+}, []);
+  
+  
   const handleSearch = async () => {
     if (!address.trim()) {
       toast({
