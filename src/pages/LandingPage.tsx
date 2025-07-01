@@ -25,6 +25,7 @@ const LandingPage = () => {
 
       const data = await response.json();
       const colegios = data.items || [];
+      console.log(colegios)
 
       // Filtrado frontend
       const filtered = colegios.filter((colegio) => {
@@ -38,7 +39,7 @@ const LandingPage = () => {
       });
 
       console.log("Colegios filtrados:", filtered.length);
-      filtered.forEach(colegio => console.log(colegio.nombre));
+      filtered.forEach(colegio => console.log(colegio.nombre, colegio.region));
 
     } catch (error) {
       console.error("Error al obtener colegios:", error);
