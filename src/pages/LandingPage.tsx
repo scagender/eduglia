@@ -14,41 +14,50 @@ const LandingPage = () => {
   const { toast } = useToast();
 
   
-  useEffect(() => {
-  const fetchAndFilterColegios = async () => {
-    try {
-      const response = await fetch("https://tucolegioapi.onrender.com/api/colegios");
+  const fetchAllColegios = async () => {
+  let page = 1;
+  let allItems = [];
+  let hasMore = true;
 
-      if (!response.ok) {
-        throw new Error(`Error al obtener colegios: ${response.status}`);
-      }
+  try {
+    while (hasMore) {
+      const response = await fetch(`https://tucolegioapi.onrender.com/api/colegios?page=${page}`);
+      if (!response.ok) throw new Error(`Error página ${page}`);
 
       const data = await response.json();
-      const colegios = data.items || [];
-      console.log(colegios)
+      const items = data.items || [];
 
-      // Filtrado frontend
-      const filtered = colegios.filter((colegio) => {
-        const region = colegio.region?.toLowerCase()
-        const nombreLower = colegio.nombre?.toLowerCase() || "";
-        const excludedWords = ["jardin", "sala cuna", "escuela de parvulos"];
+      allItems = [...allItems, ...items];
+      console.log(`Página ${page} - colegios recibidos: ${items.length}`);
 
-        return (
-          !excludedWords.some(word => nombreLower.includes(word))
-        );
-      });
-
-      console.log("Colegios filtrados:", filtered.length);
-      filtered.forEach(colegio => console.log(colegio.nombre, colegio.region));
-
-    } catch (error) {
-      console.error("Error al obtener colegios:", error);
+      hasMore = items.length > 0;
+      page++;
     }
-  };
 
-  fetchAndFilterColegios();
+    // Filtrado igual que antes
+    const filtered = allItems.filter((colegio) => {
+      const region = colegio.region?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const nombreLower = colegio.nombre?.toLowerCase() || "";
+      const excludedWords = ["jardin", "sala cuna", "escuela de parvulos"];
+
+      return (
+        region?.includes("valparaiso") &&
+        colegio.dependencia === "Particular No Subvencionado" &&
+        !excludedWords.some(word => nombreLower.includes(word))
+      );
+    });
+
+    console.log("Colegios filtrados:", filtered.length);
+    filtered.forEach(colegio => console.log(colegio.nombre));
+
+  } catch (error) {
+    console.error("Error obteniendo todas las páginas:", error);
+  }
+};
+
+useEffect(() => {
+  fetchAllColegios();
 }, []);
-  
   
   const handleSearch = async () => {
     if (!address.trim()) {
